@@ -1,3 +1,62 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: ghostwhite;
+    background-color: rgba(0, 0, 0, 0.911);
+}
+
+.shadowWelcome {
+    z-index: 1;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.651);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcomeBackground {
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.welcomeForm {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcomeFormInputBox {
+    margin: 15px;
+    width: 250px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.226);
+    border-radius: 15px;
+}
+
+.welcomeFormInputBox img {
+    margin: 10px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.4;
+}
+.welcomeFormInputBox input {
+    background-color: transparent;
+    border: transparent;
+    color: whitesmoke;
+    font-size: large;
 }
