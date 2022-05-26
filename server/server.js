@@ -20,12 +20,46 @@ const cookieSessionMiddleware = cookieSession({
 });
 app.use(cookieSessionMiddleware);
 
-// app.get("/api/get-welcome-img", async (req, res) => {
-//     db.getWelcomePic().then((pic) => {
-//         console.log("pic.url", pic, pic.url);
-//         return res.json(pic.url);
-//     });
-// });
+//API SERVING start.js
+app.get("/api/check-cookie-id", (req, res) => {
+    if (!req.session.id) {
+        return res.json({ success: false });
+    } else {
+        return res.json({ success: true });
+    }
+});
+
+//API SERVING clientLoginRegistration.js
+app.post("/api/create-client-account", async (req, res) => {
+    console.log("body", req.body);
+    db.createClientAccount(req.body)
+        .then((new_user) => {
+            const newId = { id: new_user.id };
+            req.session = newId;
+            return res.json({ success: true });
+        })
+        .catch((error) => {
+            console.log("new user error", error);
+            if (error.constraint === "accounts_email_key") {
+                return res.json({ error: "email" });
+            } else {
+                return res.json({ error: "others" });
+            }
+        });
+});
+
+//API SERVING clientLoginRegistration.js
+app.post("/api/client-auth-login", (req, res) => {
+    db.clientAuthLogin(req.body).then((result) => {
+        if (result === null) {
+            return res.json({ success: false });
+        }
+        const loginId = { id: result.id };
+        req.session = loginId;
+        res.json({ success: true });
+        return;
+    });
+});
 
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

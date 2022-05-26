@@ -5,9 +5,18 @@
 }
 
 body {
-    background-color: rgba(0, 0, 0, 0.911);
+    background-color: #a47e67;
+}
+.error {
+    margin: 5px;
+    text-align: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: large;
+    font-style: italic;
+    color: rgba(219, 114, 114, 0.842);
 }
 
+/* WELCOME */
 .shadowWelcome {
     z-index: 1;
     position: fixed;
@@ -41,6 +50,20 @@ body {
     object-fit: cover;
 }
 
+.beautyProviderLink {
+    margin: 0 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: large;
+    font-style: italic;
+    color: rgba(211, 211, 211, 0.534);
+}
+.beautyProviderLink strong {
+    cursor: pointer;
+}
+
 .welcomeForm {
     z-index: 2;
     display: flex;
@@ -69,6 +92,22 @@ body {
     border: transparent;
     color: whitesmoke;
     font-size: large;
+}
+
+.welcomeRadioBox {
+    margin: 0 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: larger;
+    color: rgba(211, 211, 211, 0.534);
+}
+
+.welcomeRadioBox input {
+    background-color: rgba(255, 255, 255, 0.541);
+    border: rgba(255, 255, 255, 0.384) 1px solid;
 }
 
 .welcomeFormBtn {
