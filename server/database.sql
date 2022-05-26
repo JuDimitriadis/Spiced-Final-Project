@@ -2,7 +2,7 @@
 
 -- DROP TABLE IF EXISTS profiles;
 
--- DROP TABLE IF EXISTS accounts;
+-- DROP TABLE IF EXISTS clientAccounts;
 
 CREATE TABLE clientAccounts (
     id                      SERIAL primary key,

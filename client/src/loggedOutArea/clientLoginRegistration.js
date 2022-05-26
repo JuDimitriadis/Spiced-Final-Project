@@ -50,11 +50,9 @@ export default function ClientLoginRegistration() {
                     return;
                 }
             })
-            .catch((err) => {
-                console.log(err);
-                this.setState({
-                    error: "Ops, somenthig went wrong! Please try again",
-                });
+            .catch((error) => {
+                console.log("login error", error);
+                setError("Ops, somenthig went wrong! Please try again");
             });
     }
 

@@ -61,6 +61,11 @@ app.post("/api/client-auth-login", (req, res) => {
     });
 });
 
+app.delete("/api/logout", (req, res) => {
+    req.session = null;
+    res.json({ success: true });
+});
+
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
