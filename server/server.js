@@ -20,12 +20,12 @@ const cookieSessionMiddleware = cookieSession({
 });
 app.use(cookieSessionMiddleware);
 
-app.get("/api/get-welcome-img", async (req, res) => {
-    db.getWelcomePic().then((pic) => {
-        console.log("pic.url", pic, pic.url);
-        return res.json(pic.url);
-    });
-});
+// app.get("/api/get-welcome-img", async (req, res) => {
+//     db.getWelcomePic().then((pic) => {
+//         console.log("pic.url", pic, pic.url);
+//         return res.json(pic.url);
+//     });
+// });
 
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

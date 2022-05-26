@@ -18,13 +18,13 @@ if (process.env.DATABASE_URL) {
 }
 
 //FUNCTION CALLED BY "api/get-welcome-img"
-function getWelcomePic() {
-    const random = Math.floor(Math.random() * 6) + 1;
-    return db
-        .query(`SELECT * FROM welcomePic WHERE id = $1`, [random])
-        .then((result) => {
-            return result.rows[0];
-        });
-}
+// function getWelcomePic() {
+//     const random = Math.floor(Math.random() * 6) + 1;
+//     return db
+//         .query(`SELECT * FROM welcomePic WHERE id = $1`, [random])
+//         .then((result) => {
+//             return result.rows[0];
+//         });
+// }
 
-module.exports = { getWelcomePic };
+module.exports = {};
