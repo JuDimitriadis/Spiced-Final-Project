@@ -1,7 +1,8 @@
 const { mapbox_token } = require("../secret.json");
-import React, { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import Map from "react-map-gl";
 
 mapboxgl.accessToken = mapbox_token;
 
@@ -10,33 +11,13 @@ export default function LocationSearch() {
         accessToken: mapbox_token,
     });
 
-    const [searchLongitude, setSearchLongitude] = useState();
-    const [searchLatitude, setSearchLatitude] = useState();
-
-    const mapContainer = useRef(null);
-    const map = useRef(null);
-    const [longitude, setLongitude] = useState(13.38333);
-    const [latitude, setLatitude] = useState(52.51667);
-    const [zoom, setZoom] = useState(10);
     const [searchList, setSearchList] = useState();
     const [selectLocation, setSelectLocation] = useState();
     const [highlight, setHighlight] = useState();
-
-    useEffect(() => {
-        if (map.current) return;
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: "mapbox://styles/mapbox/streets-v11",
-            center: [longitude, latitude],
-            zoom: zoom,
-        });
-
-        if (!map.current) return;
-        map.current.on("move", () => {
-            setLongitude(map.current.getCenter().lng.toFixed(4));
-            setLatitude(map.current.getCenter().lat.toFixed(4));
-            setZoom(map.current.getZoom().toFixed(2));
-        });
+    const [viewState, setViewState] = useState({
+        longitude: 13.38333,
+        latitude: 52.51667,
+        zoom: 10,
     });
 
     useEffect(() => {
@@ -61,29 +42,20 @@ export default function LocationSearch() {
             .send();
         if (serachVal === query) {
             setSearchList(response.body.features);
-            setSearchLongitude(
-                response.body.features[0].geometry.coordinates[0]
-            );
-            setSearchLatitude(
-                response.body.features[0].geometry.coordinates[1]
-            );
         }
+        console.log(searchList);
 
         return;
     }
 
     async function handleAddressQuerySubmit(evt) {
-        // ASK ABOUT HOW CAN I DEAL WITH THE ASYNC HERE
         evt.preventDefault();
-        setSearchList(null);
-        setLongitude(searchLongitude);
-        setLatitude(searchLatitude);
-        setZoom(11);
-
-        map.current.jumpTo({
-            center: [searchLongitude, searchLatitude],
+        setViewState({
+            longitude: searchList.geometry.coordinates[0],
+            latitude: searchList.geometry.coordinates[1],
             zoom: 11,
         });
+        setSearchList(null);
     }
 
     function handleInputClick(evt) {
@@ -96,15 +68,12 @@ export default function LocationSearch() {
 
     function handleLocationClick([lgt, ltd], name) {
         setSelectLocation(name);
-        setSearchList(null);
-        setLongitude(lgt);
-        setLatitude(ltd);
-        setZoom(11);
-
-        map.current.jumpTo({
-            center: [lgt, ltd],
+        setViewState({
+            longitude: lgt,
+            latitude: ltd,
             zoom: 11,
         });
+        setSearchList(null);
     }
 
     function handleMouseEnter(evt) {
@@ -200,14 +169,13 @@ export default function LocationSearch() {
                         })}
                     </div>
                 ) : null}
-
-                <div>
-                    <div
-                        ref={mapContainer}
-                        style={{ width: 500, height: 300 }}
-                        className="map-container"
-                    />
-                </div>
+                <Map
+                    {...viewState}
+                    onMove={(evt) => setViewState(evt.viewState)}
+                    style={{ width: 500, height: 300 }}
+                    mapStyle="mapbox://styles/mapbox/streets-v11"
+                    className="map-container"
+                />
             </div>
         </>
     );
