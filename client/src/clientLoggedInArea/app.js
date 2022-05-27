@@ -16,17 +16,19 @@ export default function App() {
     }
 
     return (
-        <div className="shadowClientApp">
-            <header className="clientAppHeader">
-                {" "}
-                <h1 className="appLogo"> The Beauty Booking</h1>
-                <img
-                    className="logoutIcon"
-                    src="/logout.png"
-                    onClick={logout}
-                ></img>{" "}
-            </header>
-            <LocationSearch></LocationSearch>
-        </div>
+        <>
+            <div className="clientApp">
+                <header className="clientAppHeader">
+                    {" "}
+                    <h1 className="appLogo"> The Beauty Booking</h1>
+                    <img
+                        className="logoutIcon"
+                        src="/logout.png"
+                        onClick={logout}
+                    ></img>{" "}
+                </header>
+                <LocationSearch></LocationSearch>
+            </div>
+        </>
     );
 }
