@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Homemade+Apple&family=Merriweather+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Homemade+Apple&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Raleway+Dots&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 * {
     box-sizing: border-box;
@@ -188,10 +188,12 @@ body {
 /* LOCATION SEARCH */
 
 .locationSearchTitle {
-    font-family: "Merriweather Sans", sans-serif;
-    color: rgba(255, 255, 255, 0.363);
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+    color: rgba(255, 255, 255, 0.411);
     font-size: x-large;
     font-weight: bold;
+    text-shadow: black 2px 2px 4px;
 }
 
 .addressQueryInputBox {
@@ -200,9 +202,9 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.329);
-    box-shadow: rgba(184, 181, 181, 0.425) 2px 2px 4px;
-    /* border-radius: 20px; */
+    background-color: rgba(255, 255, 255, 0.151);
+    box-shadow: black 2px 2px 4px;
+    border-radius: 5px;
     width: 500px;
     height: 45px;
 }
@@ -223,18 +225,18 @@ body {
 }
 
 .addressQueryBtn {
-    /* margin: 15px 15px 0px 15px; */
     width: 80px;
     height: 45px;
     text-align: center;
-    color: rgba(179, 176, 176, 0.445);
+    color: rgba(233, 232, 232, 0.445);
     font-size: medium;
+    font-family: "Barlow Condensed", sans-serif;
     background-color: rgba(0, 0, 0, 0.418);
-    /* border-radius: 0 20px 20px 0; */
+    border-radius: 5px;
 }
 
 .searchResultsBox {
-    z-index: 5;
+    z-index: 2;
     margin: 0 5px;
     display: flex;
     flex-direction: column;
@@ -245,23 +247,27 @@ body {
 }
 
 .searchResult {
+    display: flex;
+    align-items: center;
     height: 40px;
-    font-family: "Merriweather Sans", sans-serif;
+    font-family: "Quattrocento Sans", sans-serif;
     font-weight: lighter;
     color: black;
+}
+
+.searchResult p {
+    margin: 0 8px;
 }
 
 .searchResult.highlight {
     background-color: rgba(0, 0, 0, 0.541);
     color: rgba(255, 255, 255, 0.76);
+    box-shadow: rgba(0, 0, 0, 0.74) 2px 2px 4px;
 }
-/* .map-container .mapboxgl-map {
-    margin: 5px;
-    width: 500;
-    height: 300;
-} */
 
 .mapboxgl-canvas {
+    border-radius: 5px;
+    box-shadow: black 2px 2px 4px;
     margin: 5px;
 }
 
@@ -271,7 +277,7 @@ body {
 
 .mapboxgl-control-container a {
     color: rgba(255, 255, 255, 0.411);
-    font-family: "Merriweather", serif;
+    font-family: "Quattrocento Sans", sans-serif;
     font-size: smaller;
     text-decoration: none;
 }

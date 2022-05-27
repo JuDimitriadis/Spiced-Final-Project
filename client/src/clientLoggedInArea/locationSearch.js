@@ -1,7 +1,6 @@
 const { mapbox_token } = require("../secret.json");
 import React, { useRef, useEffect, useState } from "react";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
-// import Map from "react-map-gl";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken = mapbox_token;
@@ -28,13 +27,10 @@ export default function LocationSearch() {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: "mapbox://styles/mapbox/streets-v11",
-            // style: "mapbox://styles/mapbox/dark-v10",
             center: [longitude, latitude],
             zoom: zoom,
         });
-    });
 
-    useEffect(() => {
         if (!map.current) return;
         map.current.on("move", () => {
             setLongitude(map.current.getCenter().lng.toFixed(4));
@@ -43,33 +39,38 @@ export default function LocationSearch() {
         });
     });
 
+    useEffect(() => {
+        const clickClose = () => {
+            setSearchList();
+        };
+        if (searchList) {
+            window.addEventListener("click", clickClose);
+        } else {
+            window.removeEventListener("click", clickClose);
+        }
+    }, [searchList]);
+
+    let serachVal;
+
     async function handleAddressQuery(evt) {
-        //ASK ABOUT CLEAN UP FUNCTION HERE
+        serachVal = evt.target.value;
         const query = evt.target.value;
         setSelectLocation(query);
         const response = await geocoder
             .forwardGeocode({ query, limit: 5 })
             .send();
-        if (selectLocation === query) {
-            console.log("selectLocation === query");
+        if (serachVal === query) {
+            setSearchList(response.body.features);
+            setSearchLongitude(
+                response.body.features[0].geometry.coordinates[0]
+            );
+            setSearchLatitude(
+                response.body.features[0].geometry.coordinates[1]
+            );
         }
-        setSearchList(response.body.features);
-        setSearchLongitude(response.body.features[0].geometry.coordinates[0]);
-        setSearchLatitude(response.body.features[0].geometry.coordinates[1]);
+
         return;
     }
-
-    //     bbox: (4) [2.22422400085346, 48.8156060108013, 2.46976999462145, 48.9020129995121]
-    // center: (2) [2.35183, 48.85658]
-    // context: [{…}]
-    // geometry: {type: 'Point', coordinates: Array(2)}
-    // id: "place.14749210607497330"
-    // place_name: "Paris, France"
-    // place_type: (2) ['region', 'place']
-    // properties: {short_code: 'FR-75', wikidata: 'Q90'}
-    // relevance: 1
-    // text: "Paris"
-    // type: "Feature"
 
     async function handleAddressQuerySubmit(evt) {
         // ASK ABOUT HOW CAN I DEAL WITH THE ASYNC HERE
@@ -77,12 +78,20 @@ export default function LocationSearch() {
         setSearchList(null);
         setLongitude(searchLongitude);
         setLatitude(searchLatitude);
-        setZoom(12);
+        setZoom(11);
 
         map.current.jumpTo({
             center: [searchLongitude, searchLatitude],
-            zoom: 12,
+            zoom: 11,
         });
+    }
+
+    function handleInputClick(evt) {
+        if (evt.target.value) {
+            if (!searchList) {
+                handleAddressQuery(evt);
+            }
+        }
     }
 
     function handleLocationClick([lgt, ltd], name) {
@@ -90,44 +99,48 @@ export default function LocationSearch() {
         setSearchList(null);
         setLongitude(lgt);
         setLatitude(ltd);
-        setZoom(12);
+        setZoom(11);
 
         map.current.jumpTo({
             center: [lgt, ltd],
-            zoom: 12,
+            zoom: 11,
         });
     }
 
     function handleMouseEnter(evt) {
-        // console.log("evt index", evt._targetInst.index);
         setHighlight(evt._targetInst.index);
     }
 
     function handleInputKeyDown(evt) {
-        console.log("evt keycode", evt.keyCode);
-        if (evt.keyCode === 40) {
-            setHighlight(0);
+        if (evt.keyCode === 27) {
+            setSearchList();
+            return;
         }
-    }
-
-    function handleKeyDown(evt) {
-        console.log("evt keycode", evt.keyCode);
         if (evt.keyCode === 40) {
-            if (evt._targetInst.index >= 4) {
+            if (highlight >= 4) {
+                return;
+            } else if (highlight >= 0) {
+                setHighlight(highlight + 1);
+                return;
+            } else if (!highlight) {
+                setHighlight(0);
+                return;
+            }
+            return;
+        }
+
+        if (evt.keyCode === 38) {
+            if (highlight === 0) {
                 return;
             } else {
-                setHighlight(evt._targetInst.index + 1);
+                setHighlight(highlight - 1);
             }
-        } else if (evt.keyCode === 38) {
-            if (evt._targetInst.index === 0) {
-                return;
-            } else {
-                setHighlight(evt._targetInst.index - 1);
-            }
-        } else if (evt.keyCode === 13) {
+        }
+
+        if (evt.keyCode === 13) {
             handleLocationClick(
-                searchList[evt._targetInst.index].center,
-                searchList[evt._targetInst.index].place_name
+                searchList[highlight].center,
+                searchList[highlight].place_name
             );
             return;
         }
@@ -156,6 +169,7 @@ export default function LocationSearch() {
                             value={selectLocation}
                             onChange={handleAddressQuery}
                             onKeyDown={handleInputKeyDown}
+                            onClick={handleInputClick}
                         ></input>
                         <button className="addressQueryBtn">Search</button>
                     </div>
@@ -179,7 +193,6 @@ export default function LocationSearch() {
                                         )
                                     }
                                     onMouseEnter={handleMouseEnter}
-                                    onKeyDown={handleKeyDown}
                                 >
                                     <p>{result.place_name}</p>
                                 </div>
