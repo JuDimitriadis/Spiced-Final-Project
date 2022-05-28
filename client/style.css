@@ -185,12 +185,21 @@ body {
     opacity: 0.4;
 }
 
+.clientSearch {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 /* LOCATION SEARCH */
 
 .locationSearchTitle {
     text-align: center;
     font-family: "Raleway", sans-serif;
     color: rgba(255, 255, 255, 0.411);
+    /* color: #dd499177; */
     font-size: x-large;
     font-weight: bold;
     text-shadow: black 2px 2px 4px;
@@ -278,6 +287,13 @@ body {
 }
 
 .mapMarkerBtn img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
+}
+
+/* FILTER BAR  */
+
+.filterBarSlider {
+    margin-right: 100px;
+    width: 100px;
 }
