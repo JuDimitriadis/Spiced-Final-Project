@@ -181,9 +181,9 @@ export default function LocationSearch() {
                     {...viewState}
                     style={{ width: 500, height: 300 }}
                     mapStyle="mapbox://styles/mapbox/streets-v11"
-                    className="map-container"
+                    className="mapContainer"
                     mapboxApiAccessToken={mapbox_token}
-                    onViewStateChange={(viewState) => setViewState(viewState)}
+                    onMove={(evt) => setViewState(evt.viewState)}
                 >
                     {markersData &&
                         markersData.map((data) => (
@@ -193,7 +193,9 @@ export default function LocationSearch() {
                                 latitude={data.geojson.coordinates[0]}
                             >
                                 <button className="mapMarkerBtn">
-                                    <img src="/Hairdresser.png"></img>
+                                    <img
+                                        src={`/${data.provider_type}.png`}
+                                    ></img>
                                 </button>
                             </Marker>
                         ))}

@@ -265,25 +265,10 @@ body {
     box-shadow: rgba(0, 0, 0, 0.74) 2px 2px 4px;
 }
 
-.mapboxgl-canvas {
+.mapboxgl-map {
     border-radius: 5px;
     box-shadow: black 2px 2px 4px;
     margin: 5px;
-}
-
-.mapboxgl-control-container {
-    margin: 0 8px;
-}
-
-.mapboxgl-control-container a {
-    color: rgba(255, 255, 255, 0.411);
-    font-family: "Quattrocento Sans", sans-serif;
-    font-size: smaller;
-    text-decoration: none;
-}
-
-.mapboxgl-ctrl-attrib-button {
-    display: none;
 }
 
 .mapMarkerBtn {
