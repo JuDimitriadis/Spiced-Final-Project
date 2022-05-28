@@ -48,7 +48,7 @@ app.post("/api/create-client-account", async (req, res) => {
         });
 });
 
-//API SERVING clientLoginRegistration.js
+//API SERVING app.js
 app.post("/api/client-auth-login", (req, res) => {
     db.clientAuthLogin(req.body).then((result) => {
         if (result === null) {
@@ -58,6 +58,14 @@ app.post("/api/client-auth-login", (req, res) => {
         req.session = loginId;
         res.json({ success: true });
         return;
+    });
+});
+
+//API SERVING clientLoginRegistration.js
+app.get("/api/get-places", (req, res) => {
+    db.getMarkersData().then((result) => {
+        console.log("getMarkersData server", result);
+        res.json(result);
     });
 });
 

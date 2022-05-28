@@ -90,4 +90,15 @@ function changePassword(newpassword, id) {
         });
 }
 
-module.exports = { createClientAccount, clientAuthLogin };
+function getMarkersData() {
+    return db
+        .query(
+            `SELECT name, provider_type, address, ST_AsGeoJSON(geom)::jsonb as geoJSON FROM places`
+        )
+        .then((result) => result.rows);
+}
+
+// SELECT name, provider_type, address, ST_AsGeoJSON(geom)::jsonb as geoJSON FROM places
+// ST_AsGeoJSON(geom)::jsonb,
+
+module.exports = { createClientAccount, clientAuthLogin, getMarkersData };

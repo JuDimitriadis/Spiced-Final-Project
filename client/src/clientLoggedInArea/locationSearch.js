@@ -2,7 +2,7 @@ const { mapbox_token } = require("../secret.json");
 import { useEffect, useState } from "react";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import Map from "react-map-gl";
+import ReactMapGL, { Marker, Popup } from "react-map-gl";
 
 mapboxgl.accessToken = mapbox_token;
 
@@ -14,6 +14,7 @@ export default function LocationSearch() {
     const [searchList, setSearchList] = useState();
     const [selectLocation, setSelectLocation] = useState();
     const [highlight, setHighlight] = useState();
+    const [markersData, setMarkersData] = useState();
     const [viewState, setViewState] = useState({
         longitude: 13.38333,
         latitude: 52.51667,
@@ -29,7 +30,14 @@ export default function LocationSearch() {
         } else {
             window.removeEventListener("click", clickClose);
         }
-    }, [searchList]);
+
+        fetch("/api/get-places")
+            .then((res) => res.json())
+            .then((result) => {
+                console.log("fetch result", result);
+                setMarkersData(result);
+            });
+    }, [searchList, viewState]);
 
     let serachVal;
 
@@ -163,19 +171,33 @@ export default function LocationSearch() {
                                     }
                                     onMouseEnter={handleMouseEnter}
                                 >
-                                    <p>{result.place_name}</p>
+                                    <p>{result.place_name} </p>
                                 </div>
                             );
                         })}
                     </div>
                 ) : null}
-                <Map
+                <ReactMapGL
                     {...viewState}
-                    onMove={(evt) => setViewState(evt.viewState)}
                     style={{ width: 500, height: 300 }}
                     mapStyle="mapbox://styles/mapbox/streets-v11"
                     className="map-container"
-                />
+                    mapboxApiAccessToken={mapbox_token}
+                    onViewStateChange={(viewState) => setViewState(viewState)}
+                >
+                    {markersData &&
+                        markersData.map((data) => (
+                            <Marker
+                                key={data.id}
+                                longitude={data.geojson.coordinates[1]}
+                                latitude={data.geojson.coordinates[0]}
+                            >
+                                <button className="mapMarkerBtn">
+                                    <img src="/Hairdresser.png"></img>
+                                </button>
+                            </Marker>
+                        ))}
+                </ReactMapGL>
             </div>
         </>
     );

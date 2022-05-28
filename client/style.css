@@ -285,3 +285,14 @@ body {
 .mapboxgl-ctrl-attrib-button {
     display: none;
 }
+
+.mapMarkerBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.mapMarkerBtn img {
+    width: 20px;
+    height: 20px;
+}
