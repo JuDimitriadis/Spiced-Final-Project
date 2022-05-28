@@ -199,7 +199,6 @@ body {
     text-align: center;
     font-family: "Raleway", sans-serif;
     color: rgba(255, 255, 255, 0.411);
-    /* color: #dd499177; */
     font-size: x-large;
     font-weight: bold;
     text-shadow: black 2px 2px 4px;
@@ -293,7 +292,71 @@ body {
 
 /* FILTER BAR  */
 
+.filterBar {
+    margin-top: 45px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+/* .filterBarDate {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.filterBarCategories {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+} */
+
+/* .filterBar label {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: lighter;
+    color: rgba(255, 255, 255, 0.582);
+} */
+
+.filterBar input {
+    margin: 10px;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.432);
+    box-shadow: black 2px 2px 4px;
+    border-radius: 5px;
+    width: 180px;
+    height: 45px;
+}
+
+.filterBar select {
+    margin: 10px;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.432);
+    box-shadow: black 2px 2px 4px;
+    border-radius: 5px;
+    width: 180px;
+    height: 45px;
+}
+
+.filterBarSliderTypography {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: lighter;
+    color: rgba(255, 255, 255, 0.582);
+}
+
 .filterBarSlider {
-    margin-right: 100px;
-    width: 100px;
+    margin: 10px;
+}
+
+.filterBar button {
+    margin: 10px;
+    width: 120px;
+    height: 45px;
+    text-align: center;
+    color: rgba(233, 232, 232, 0.445);
+    font-size: medium;
+    font-family: "Barlow Condensed", sans-serif;
+    background-color: rgba(0, 0, 0, 0.418);
+    border-radius: 5px;
 }

@@ -51,6 +51,20 @@ const PriceRangeSlider = withStyles({
 export default function FilterBar() {
     const [sliderValue, setSliderValue] = useState([50, 250]);
 
+    function disablePastDates() {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+        if (month < 10) {
+            month = "0" + month;
+        }
+        if (day < 10) {
+            day = "0" + day;
+        }
+        return `${year}-${month}-${day}`;
+    }
+
     function updateRange(evt, data) {
         setSliderValue(data);
     }
@@ -61,9 +75,28 @@ export default function FilterBar() {
     }
 
     return (
-        <div className="filterBarSlider">
-            <div>
-                <Typography id="discrete-slider-custom" gutterBottom>
+        <div className="filterBar">
+            {/* <div className="filterBarDate">
+                <label htmlFor="date">
+                    When would you like to make an appointment?
+                </label> */}
+            <input type="date" name="date" min={disablePastDates()}></input>
+            {/* </div>{" "} */}
+            {/* <div className="filterBarCategories">
+                <label htmlFor="categories">Categories</label> */}
+            <select name="categories">
+                <option value="categories">Categories</option>
+                <option value="barber">Barber</option>
+                <option value="eyebrows">Eyebrows</option>
+                <option value="hairdresser">Hairdresser</option>
+                <option value="skinCare">Skin Care</option>
+                <option value="spa">Spa</option>
+                <option value="makeup">Makeup</option>
+                <option value="nails">Nails</option>
+            </select>
+            {/* </div> */}
+            <div className="filterBarSlider">
+                <Typography className="filterBarSliderTypography">
                     Price Range
                 </Typography>
                 <PriceRangeSlider
@@ -78,6 +111,7 @@ export default function FilterBar() {
                     max={300}
                 ></PriceRangeSlider>
             </div>
+            <button>Reset Filter</button>
         </div>
     );
 }
