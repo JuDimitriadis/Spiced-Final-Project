@@ -31,7 +31,7 @@ export default function LocationSearch() {
             window.removeEventListener("click", clickClose);
         }
 
-        fetch("/api/get-places")
+        fetch("/api/get-markers")
             .then((res) => res.json())
             .then((result) => {
                 console.log("fetch result", result);
@@ -193,9 +193,7 @@ export default function LocationSearch() {
                                 latitude={data.geojson.coordinates[0]}
                             >
                                 <button className="mapMarkerBtn">
-                                    <img
-                                        src={`/${data.provider_type}.png`}
-                                    ></img>
+                                    <img src={`/${data.type}.png`}></img>
                                 </button>
                             </Marker>
                         ))}

@@ -1,5 +1,6 @@
 import LocationSearch from "./locationSearch";
 import FilterBar from "./filterBar";
+import SearchResults from "./searchResults";
 
 export default function App() {
     function logout() {
@@ -30,7 +31,10 @@ export default function App() {
                 </header>
                 <div className="clientSearch">
                     <LocationSearch></LocationSearch>
-                    <FilterBar></FilterBar>
+                    <div className="barSearchAndResults">
+                        <FilterBar></FilterBar>
+                        <SearchResults></SearchResults>
+                    </div>
                 </div>
             </div>
         </>

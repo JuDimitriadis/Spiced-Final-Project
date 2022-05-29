@@ -62,7 +62,7 @@ app.post("/api/client-auth-login", (req, res) => {
 });
 
 //API SERVING clientLoginRegistration.js
-app.get("/api/get-places", (req, res) => {
+app.get("/api/get-markers", (req, res) => {
     db.getMarkersData().then((result) => {
         console.log("getMarkersData server", result);
         res.json(result);

@@ -28,7 +28,7 @@ const PriceRangeSlider = withStyles({
     active: {},
     valueLabel: {
         left: "calc(-50% + 4px)",
-        color: "#dd499177",
+        color: "Black",
     },
     track: {
         height: 15,
@@ -76,25 +76,25 @@ export default function FilterBar() {
 
     return (
         <div className="filterBar">
-            {/* <div className="filterBarDate">
-                <label htmlFor="date">
-                    When would you like to make an appointment?
-                </label> */}
-            <input type="date" name="date" min={disablePastDates()}></input>
-            {/* </div>{" "} */}
-            {/* <div className="filterBarCategories">
-                <label htmlFor="categories">Categories</label> */}
-            <select name="categories">
-                <option value="categories">Categories</option>
-                <option value="barber">Barber</option>
-                <option value="eyebrows">Eyebrows</option>
-                <option value="hairdresser">Hairdresser</option>
-                <option value="skinCare">Skin Care</option>
-                <option value="spa">Spa</option>
-                <option value="makeup">Makeup</option>
-                <option value="nails">Nails</option>
-            </select>
-            {/* </div> */}
+            <div className="filterBarName">
+                <img src="/store.png"></img>
+                <input type="text" name="name" placeholder="Name"></input>
+            </div>
+            <div className="filterBarDate">
+                <input type="date" name="date" min={disablePastDates()}></input>
+            </div>
+            <div className="filterBarCategories">
+                <select name="categories">
+                    <option value="categories">Categories</option>
+                    <option value="barber">Barber</option>
+                    <option value="eyebrows">Eyebrows</option>
+                    <option value="hairdresser">Hairdresser</option>
+                    <option value="skinCare">Skin Care</option>
+                    <option value="spa">Spa</option>
+                    <option value="makeup">Makeup</option>
+                    <option value="nails">Nails</option>
+                </select>
+            </div>
             <div className="filterBarSlider">
                 <Typography className="filterBarSliderTypography">
                     Price Range

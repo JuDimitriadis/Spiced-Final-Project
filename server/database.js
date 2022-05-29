@@ -93,7 +93,7 @@ function changePassword(newpassword, id) {
 function getMarkersData() {
     return db
         .query(
-            `SELECT name, provider_type, address, ST_AsGeoJSON(geom)::jsonb as geoJSON FROM places`
+            `SELECT name, type, address, ST_AsGeoJSON(geom)::jsonb as geoJSON FROM professional_profile`
         )
         .then((result) => result.rows);
 }
