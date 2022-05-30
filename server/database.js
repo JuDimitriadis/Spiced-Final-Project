@@ -99,7 +99,9 @@ function getMarkersData() {
 }
 
 function getSearchData({ ltd, lgt, name, low, hight, category }) {
+    console.log("DATA BASE REQ VALUES", ltd, lgt, name, low, hight, category);
     if (category) {
+        console.log("YES category", category);
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
@@ -112,8 +114,9 @@ AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.pric
 ORDER BY services.price ASC`,
                 [ltd, lgt, name + "%", low, hight, category]
             )
-            .then((result) => console.log(result.rows));
+            .then((result) => result.rows);
     } else {
+        console.log("NO category", category);
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,

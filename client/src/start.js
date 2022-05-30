@@ -15,7 +15,6 @@ const store = createStore(
 fetch("/api/check-cookie-id")
     .then((res) => res.json())
     .then((result) => {
-        console.log("login result", result);
         if (result.success === false) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {

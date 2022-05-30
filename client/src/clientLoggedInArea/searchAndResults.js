@@ -12,47 +12,69 @@ export default function SearchAndResults() {
             state.searchAndResultsReducer && state.searchAndResultsReducer
     );
 
-    const [sliderValue, setSliderValue] = useState([0, 600]);
-    const [viewSearch, setViewSearch] = useState({
-        longitude: 13.376634503116708,
-        latitude: 52.536594783793284,
-    });
-
-    useEffect(() => {
-        const body = {
-            ltd: viewSearch.latitude,
-            lgt: viewSearch.longitude,
-            name: ``,
-            low: sliderValue[0],
-            hight: sliderValue[1],
-            category: ``,
-        };
-        const bodyJson = JSON.stringify(body);
-
-        fetch("/api/get-search-data", {
-            method: "POST",
-            body: bodyJson,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                dispatch(receivedsearchData(result));
-                setSliderValue([result[0].price, result[result.length - 1]]);
-            });
-    }, [viewSearch]);
+    const markersData = useSelector(
+        (state) =>
+            state.searchAndResultsReducer && [
+                ...new Map(
+                    state.searchAndResultsReducer.map((item) => [item.id, item])
+                ).values(),
+            ]
+    );
 
     return (
         <div className="clientSearch">
-            <LocationSearch onViewSearchChange={setViewSearch}></LocationSearch>
+            <LocationSearch></LocationSearch>
             <div className="barSearchAndResults">
-                <FilterBar
-                    sliderValue={sliderValue}
-                    onSliderValueChange={setSliderValue}
-                ></FilterBar>
-                <div className="clientSearchResults"> I AM SERACH REAULSTS</div>
+                <FilterBar></FilterBar>
+                <div className="clientSearchResults">
+                    {markersData &&
+                        markersData.map((each) => {
+                            return (
+                                <>
+                                    <div className="eachReasult" key={each.id}>
+                                        <h1 className="eachResultName">
+                                            {each.name}
+                                        </h1>
+                                        <p className="eachResultAddress">
+                                            {each.address}
+                                        </p>
+                                        {searchData &&
+                                            searchData.map((eachService) => {
+                                                if (
+                                                    eachService.id === each.id
+                                                ) {
+                                                    return (
+                                                        <>
+                                                            <p>
+                                                                {
+                                                                    eachService.service_name
+                                                                }
+                                                            </p>
+                                                            <p>
+                                                                {
+                                                                    eachService.price
+                                                                }
+                                                            </p>
+                                                        </>
+                                                    );
+                                                }
+                                            })}
+                                    </div>
+                                </>
+                            );
+                        })}
+                </div>
             </div>
         </div>
+        // </div>
     );
 }
+
+// address: "Willy-Lessing-Straße 4"
+// category: "Nails"
+// duration: "01:00:00"
+// geojson: {type: 'Point', coordinates: Array(2)}
+// id: 7
+// name: "Red Nails"
+// price: 50
+// service_name: "Acrylic Overlay"

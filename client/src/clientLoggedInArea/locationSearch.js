@@ -5,10 +5,11 @@ import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loade
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
 import { receivedsearchData } from "../redux/searchAndResults/slicer";
+import { receviedViewState } from "../redux/locationSearch/slicer";
 
 mapboxgl.accessToken = mapbox_token;
 
-export default function LocationSearch(onViewSearchChange) {
+export default function LocationSearch() {
     const geocoder = GeocoderService({
         accessToken: mapbox_token,
     });
@@ -30,6 +31,15 @@ export default function LocationSearch(onViewSearchChange) {
         latitude: 52.536594783793284,
         zoom: 10,
     });
+
+    useEffect(() => {
+        dispatch(
+            receviedViewState({
+                longitude: viewState.longitude,
+                latitude: viewState.latitude,
+            })
+        );
+    }, []);
 
     useEffect(() => {
         const clickClose = () => {
@@ -65,11 +75,12 @@ export default function LocationSearch(onViewSearchChange) {
             latitude: searchList.geometry.coordinates[1],
             zoom: 11,
         });
-
-        onViewSearchChange({
-            lgt: searchList.geometry.coordinates[0],
-            ltd: searchList.geometry.coordinates[1],
-        });
+        dispatch(
+            receviedViewState({
+                longitude: searchList.geometry.coordinates[0],
+                latitude: searchList.geometry.coordinates[1],
+            })
+        );
         setSearchList(null);
     }
 
@@ -88,8 +99,12 @@ export default function LocationSearch(onViewSearchChange) {
             latitude: ltd,
             zoom: 11,
         });
-        console.log("handleLocationClick");
-        handleViewChange(lgt, ltd);
+        dispatch(
+            receviedViewState({
+                longitude: lgt,
+                latitude: ltd,
+            })
+        );
         setSearchList(null);
     }
 
@@ -136,12 +151,13 @@ export default function LocationSearch(onViewSearchChange) {
         setHighlight(null);
     }
 
-    function handleViewChange(lgt, ltd) {
-        console.log("handleViewChange", lgt, ltd, onViewSearchChange);
-        onViewSearchChange({
-            longitude: lgt,
-            latitude: ltd,
-        });
+    function handleMoveEnd({ longitude, latitude }) {
+        dispatch(
+            receviedViewState({
+                longitude: longitude,
+                latitude: latitude,
+            })
+        );
     }
 
     console.log("markersData", markersData);
@@ -202,6 +218,7 @@ export default function LocationSearch(onViewSearchChange) {
                     className="mapContainer"
                     mapboxApiAccessToken={mapbox_token}
                     onMove={(evt) => setViewState(evt.viewState)}
+                    onMoveEnd={(evt) => handleMoveEnd(evt.viewState)}
                 >
                     {markersData &&
                         markersData.map((data) => (
