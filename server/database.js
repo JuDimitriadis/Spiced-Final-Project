@@ -98,7 +98,41 @@ function getMarkersData() {
         .then((result) => result.rows);
 }
 
-// SELECT name, provider_type, address, ST_AsGeoJSON(geom)::jsonb as geoJSON FROM places
-// ST_AsGeoJSON(geom)::jsonb,
+function getSearchData({ ltd, lgt, name, low, hight, category }) {
+    if (category) {
+        return db
+            .query(
+                `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
+ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration
+FROM professional_profile
+FULL JOIN services
+ON  professional_profile.id = services.professional_id
+WHERE ST_DWithin(geom, ST_MakePoint($1, $2)::geography, 5000)
+AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5 AND services.category = $6 
+ORDER BY services.price ASC`,
+                [ltd, lgt, name + "%", low, hight, category]
+            )
+            .then((result) => console.log(result.rows));
+    } else {
+        return db
+            .query(
+                `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
+    ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration
+    FROM professional_profile
+    FULL JOIN services
+    ON  professional_profile.id = services.professional_id
+    WHERE ST_DWithin(geom, ST_MakePoint($1, $2)::geography, 5000)
+    AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5 
+    ORDER BY services.price ASC`,
+                [ltd, lgt, name + "%", low, hight]
+            )
+            .then((result) => result.rows);
+    }
+}
 
-module.exports = { createClientAccount, clientAuthLogin, getMarkersData };
+module.exports = {
+    createClientAccount,
+    clientAuthLogin,
+    getMarkersData,
+    getSearchData,
+};

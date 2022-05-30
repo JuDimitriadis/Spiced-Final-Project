@@ -61,10 +61,17 @@ app.post("/api/client-auth-login", (req, res) => {
     });
 });
 
-//API SERVING clientLoginRegistration.js
+//API SERVING searchLocation.js
 app.get("/api/get-markers", (req, res) => {
     db.getMarkersData().then((result) => {
-        console.log("getMarkersData server", result);
+        // console.log("getMarkersData server", result);
+        res.json(result);
+    });
+});
+
+app.post("/api/get-search-data", (req, res) => {
+    db.getSearchData(req.body).then((result) => {
+        console.log("/api/get-search-data", result);
         res.json(result);
     });
 });

@@ -1,6 +1,4 @@
-import LocationSearch from "./locationSearch";
-import FilterBar from "./filterBar";
-import SearchResults from "./searchResults";
+import SearchAndResults from "./searchAndResults";
 
 export default function App() {
     function logout() {
@@ -29,13 +27,7 @@ export default function App() {
                         onClick={logout}
                     ></img>{" "}
                 </header>
-                <div className="clientSearch">
-                    <LocationSearch></LocationSearch>
-                    <div className="barSearchAndResults">
-                        <FilterBar></FilterBar>
-                        <SearchResults></SearchResults>
-                    </div>
-                </div>
+                <SearchAndResults></SearchAndResults>
             </div>
         </>
     );

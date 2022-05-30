@@ -3,21 +3,31 @@ import { useEffect, useState } from "react";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
+import { useDispatch, useSelector } from "react-redux";
+import { receivedsearchData } from "../redux/searchAndResults/slicer";
 
 mapboxgl.accessToken = mapbox_token;
 
-export default function LocationSearch() {
+export default function LocationSearch(onViewSearchChange) {
     const geocoder = GeocoderService({
         accessToken: mapbox_token,
     });
+    const dispatch = useDispatch();
 
+    const markersData = useSelector(
+        (state) =>
+            state.searchAndResultsReducer && [
+                ...new Map(
+                    state.searchAndResultsReducer.map((item) => [item.id, item])
+                ).values(),
+            ]
+    );
     const [searchList, setSearchList] = useState();
     const [selectLocation, setSelectLocation] = useState();
     const [highlight, setHighlight] = useState();
-    const [markersData, setMarkersData] = useState();
     const [viewState, setViewState] = useState({
-        longitude: 13.38333,
-        latitude: 52.51667,
+        longitude: 13.376634503116708,
+        latitude: 52.536594783793284,
         zoom: 10,
     });
 
@@ -30,13 +40,6 @@ export default function LocationSearch() {
         } else {
             window.removeEventListener("click", clickClose);
         }
-
-        fetch("/api/get-markers")
-            .then((res) => res.json())
-            .then((result) => {
-                console.log("fetch result", result);
-                setMarkersData(result);
-            });
     }, [searchList, viewState]);
 
     let serachVal;
@@ -51,7 +54,6 @@ export default function LocationSearch() {
         if (serachVal === query) {
             setSearchList(response.body.features);
         }
-        console.log(searchList);
 
         return;
     }
@@ -62,6 +64,11 @@ export default function LocationSearch() {
             longitude: searchList.geometry.coordinates[0],
             latitude: searchList.geometry.coordinates[1],
             zoom: 11,
+        });
+
+        onViewSearchChange({
+            lgt: searchList.geometry.coordinates[0],
+            ltd: searchList.geometry.coordinates[1],
         });
         setSearchList(null);
     }
@@ -81,6 +88,8 @@ export default function LocationSearch() {
             latitude: ltd,
             zoom: 11,
         });
+        console.log("handleLocationClick");
+        handleViewChange(lgt, ltd);
         setSearchList(null);
     }
 
@@ -127,6 +136,15 @@ export default function LocationSearch() {
         setHighlight(null);
     }
 
+    function handleViewChange(lgt, ltd) {
+        console.log("handleViewChange", lgt, ltd, onViewSearchChange);
+        onViewSearchChange({
+            longitude: lgt,
+            latitude: ltd,
+        });
+    }
+
+    console.log("markersData", markersData);
     return (
         <>
             <div className="locationSearch">
@@ -193,7 +211,7 @@ export default function LocationSearch() {
                                 latitude={data.geojson.coordinates[0]}
                             >
                                 <button className="mapMarkerBtn">
-                                    <img src={`/${data.type}.png`}></img>
+                                    <img src={`/${data.category}.png`}></img>
                                 </button>
                             </Marker>
                         ))}

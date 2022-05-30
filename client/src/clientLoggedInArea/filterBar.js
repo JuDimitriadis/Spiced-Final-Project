@@ -48,8 +48,10 @@ const PriceRangeSlider = withStyles({
     },
 })(Slider);
 
-export default function FilterBar() {
-    const [sliderValue, setSliderValue] = useState([50, 250]);
+export default function FilterBar(sliderValue, setSliderValue) {
+    console.log("sliderValue", sliderValue);
+    console.log(("setSliderValue", setSliderValue));
+    // const [sliderValue, setSliderValue] = useState([50, 250]);
 
     function disablePastDates() {
         const today = new Date();
@@ -100,7 +102,7 @@ export default function FilterBar() {
                     Price Range
                 </Typography>
                 <PriceRangeSlider
-                    value={sliderValue}
+                    value={[0, 600]}
                     defaultValue={[30, 300]}
                     color="secondary"
                     onChange={updateRange}
