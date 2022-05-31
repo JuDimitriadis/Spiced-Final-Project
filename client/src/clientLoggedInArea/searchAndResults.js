@@ -7,10 +7,10 @@ import { receivedsearchData } from "../redux/searchAndResults/slicer";
 export default function SearchAndResults() {
     const dispatch = useDispatch();
 
-    // const searchData = useSelector(
-    //     (state) =>
-    //         state.searchAndResultsReducer && state.searchAndResultsReducer
-    // );
+    const searchData = useSelector(
+        (state) =>
+            state.searchAndResultsReducer && state.searchAndResultsReducer
+    );
 
     const markersData = useSelector(
         (state) =>
@@ -77,6 +77,28 @@ export default function SearchAndResults() {
                                             className="eachReasult"
                                             key={each.id}
                                         >
+                                            <div className="resultsTimeSlots">
+                                                {slots &&
+                                                    slots.map((eachSlot) => {
+                                                        if (
+                                                            eachSlot.id ===
+                                                            each.id
+                                                        ) {
+                                                            return (
+                                                                <p
+                                                                    key={
+                                                                        eachSlot.slot_time
+                                                                    }
+                                                                >
+                                                                    {eachSlot.slot_time.slice(
+                                                                        0,
+                                                                        5
+                                                                    )}
+                                                                </p>
+                                                            );
+                                                        }
+                                                    })}
+                                            </div>
                                             <h1 className="eachResultName">
                                                 {each.name}
                                             </h1>
@@ -108,29 +130,9 @@ export default function SearchAndResults() {
                                                         }
                                                     }
                                                 )}
-
-                                            <div className="resultsTimeSlots">
-                                                {slots &&
-                                                    slots.map((eachSlot) => {
-                                                        if (
-                                                            eachSlot.id ===
-                                                            each.id
-                                                        ) {
-                                                            return (
-                                                                <p
-                                                                    key={
-                                                                        eachSlot.slot_time
-                                                                    }
-                                                                >
-                                                                    {eachSlot.slot_time.slice(
-                                                                        0,
-                                                                        5
-                                                                    )}
-                                                                </p>
-                                                            );
-                                                        }
-                                                    })}
-                                            </div>
+                                            <p className="searchResultLink">
+                                                Book Now
+                                            </p>
                                         </div>
                                     </>
                                 );

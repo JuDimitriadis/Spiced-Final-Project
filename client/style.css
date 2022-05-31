@@ -263,11 +263,13 @@ body {
     display: flex;
     flex-direction: row;
     overflow-x: scroll;
+    transform: rotateX(180deg);
 }
 
 .resultsTimeSlots p {
     font-family: "Raleway", sans-serif;
     margin: 5px 10px 10px 0;
+    transform: rotateX(180deg);
 }
 
 .resultsTimeSlots::-webkit-scrollbar {
@@ -282,6 +284,17 @@ body {
     background-color: #dd49916c;
     border: 1px dashed rgba(0, 0, 0, 0.486);
     border-radius: 5px;
+}
+
+.searchResultLink {
+    text-align: end;
+    padding: 10px;
+    font-family: "Barlow Condensed", sans-serif;
+    color: #dd49919d;
+    font-size: larger;
+    box-shadow: #dd4991 2px 2px 4px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* LOCATION SEARCH */
