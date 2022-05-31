@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import LocationSearch from "./locationSearch";
 import FilterBar from "./filterBar";
+import BookingBox from "./bookingBox";
 import { useDispatch, useSelector } from "react-redux";
 import { receivedsearchData } from "../redux/searchAndResults/slicer";
 
 export default function SearchAndResults() {
-    // const dispatch = useDispatch();
-
-    // const searchData = useSelector(
-    //     (state) =>
-    //         state.searchAndResultsReducer && state.searchAndResultsReducer
-    // );
+    const [timeSelected, setTimeSelected] = useState({
+        time: "",
+        professionalId: "",
+    });
+    const [serviceSelected, setServiceSelected] = useState({
+        service: "",
+        professionalId: "",
+    });
 
     const markersData = useSelector(
         (state) =>
@@ -57,8 +60,6 @@ export default function SearchAndResults() {
         }
     });
 
-    console.log("servicesData", servicesData);
-    console.log("slots", slots);
     return (
         <>
             {" "}
@@ -86,9 +87,29 @@ export default function SearchAndResults() {
                                                         ) {
                                                             return (
                                                                 <p
+                                                                    className={
+                                                                        each.id ===
+                                                                            timeSelected.professionalId &&
+                                                                        eachSlot.slot_time ===
+                                                                            timeSelected.time
+                                                                            ? "timeSelected"
+                                                                            : "timeNotSelected"
+                                                                    }
                                                                     key={
                                                                         eachSlot.slot_time
                                                                     }
+                                                                    onClick={() => {
+                                                                        console.log(
+                                                                            "clicked"
+                                                                        );
+                                                                        setTimeSelected(
+                                                                            {
+                                                                                time: eachSlot.slot_time,
+                                                                                professionalId:
+                                                                                    each.id,
+                                                                            }
+                                                                        );
+                                                                    }}
                                                                 >
                                                                     {eachSlot.slot_time.slice(
                                                                         0,
@@ -113,7 +134,29 @@ export default function SearchAndResults() {
                                                             each.id
                                                         ) {
                                                             return (
-                                                                <div className="eachServiceData">
+                                                                <div
+                                                                    key={
+                                                                        eachService.service_name
+                                                                    }
+                                                                    className={
+                                                                        each.id ===
+                                                                            serviceSelected.professionalId &&
+                                                                        eachService.service_name ===
+                                                                            serviceSelected.service
+                                                                            ? "eachServiceDataSelected"
+                                                                            : "eachServiceData"
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setServiceSelected(
+                                                                            {
+                                                                                service:
+                                                                                    eachService.service_name,
+                                                                                professionalId:
+                                                                                    each.id,
+                                                                            }
+                                                                        );
+                                                                    }}
+                                                                >
                                                                     <p>
                                                                         {
                                                                             eachService.service_name
@@ -130,10 +173,24 @@ export default function SearchAndResults() {
                                                         }
                                                     }
                                                 )}
-                                            <p className="searchResultLink">
+                                            <p
+                                                className="searchResultLink"
+                                                // onClick={settingShowBookingBox}
+                                            >
                                                 Book Now
                                             </p>
                                         </div>
+                                        {/* {showBookingbox ? (
+                                            <BookingBox
+                                                professionalId={
+                                                    each.professional_id
+                                                }
+                                                showBookingbox={showBookingbox}
+                                                onShowBookingBoxChange={
+                                                    settingShowBookingBox
+                                                }
+                                            ></BookingBox>
+                                        ) : null} */}
                                     </>
                                 );
                             })}

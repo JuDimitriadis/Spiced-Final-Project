@@ -249,9 +249,22 @@ body {
     justify-content: space-between;
     border-bottom: 1px dashed #dd49916c;
     border-radius: 10px;
+    font-family: "Raleway", sans-serif;
+    color: rgba(255, 255, 255, 0.575);
 }
 
-.eachServiceData p {
+.eachServiceData:hover {
+    color: #dd499186;
+}
+.eachServiceDataSelected {
+    background-color: #dd49912f;
+    padding: 2px 40px 2px 40px;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px dashed #dd499196;
+    border-radius: 10px;
     font-family: "Raleway", sans-serif;
     color: rgba(255, 255, 255, 0.575);
 }
@@ -272,6 +285,11 @@ body {
     transform: rotateX(180deg);
 }
 
+.resultsTimeSlots p:hover {
+    color: rgba(255, 255, 255, 0.342);
+    cursor: pointer;
+}
+
 .resultsTimeSlots::-webkit-scrollbar {
     width: 12px;
     /* border-radius: 5px; */
@@ -283,6 +301,14 @@ body {
 .resultsTimeSlots::-webkit-scrollbar-thumb {
     background-color: #dd49916c;
     border: 1px dashed rgba(0, 0, 0, 0.486);
+    border-radius: 5px;
+}
+
+.timeSelected {
+    padding: 2px;
+    color: rgba(255, 255, 255, 0.575);
+    font-weight: bold;
+    border: 1px dashed rgba(255, 255, 255, 0.575);
     border-radius: 5px;
 }
 
