@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { receivedsearchData } from "../redux/searchAndResults/slicer";
 
 export default function SearchAndResults() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    const searchData = useSelector(
-        (state) =>
-            state.searchAndResultsReducer && state.searchAndResultsReducer
-    );
+    // const searchData = useSelector(
+    //     (state) =>
+    //         state.searchAndResultsReducer && state.searchAndResultsReducer
+    // );
 
     const markersData = useSelector(
         (state) =>
