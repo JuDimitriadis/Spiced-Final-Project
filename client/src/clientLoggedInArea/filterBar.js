@@ -5,12 +5,13 @@ import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import { useDispatch, useSelector } from "react-redux";
 import { receivedsearchData } from "../redux/searchAndResults/slicer";
+import { receviedViewState } from "../redux/locationSearch/slicer";
 
 const PriceRangeSlider = withStyles({
     root: {
         height: 20,
         padding: "13px 0",
-        width: "250px",
+        width: "200px",
     },
     thumb: {
         height: 30,
@@ -51,15 +52,20 @@ const PriceRangeSlider = withStyles({
 })(Slider);
 
 export default function FilterBar() {
-    const [sliderValue, setSliderValue] = useState([0, 600]);
+    const [sliderValue, setSliderValue] = useState([0, 700]);
     const [searchNameValue, setSearchNameValue] = useState();
     const [searchCategoryValue, setSearchCategoryValue] = useState();
+    const [searchDateValue, setSearchDateValue] = useState(
+        new Date().toLocaleDateString("en-CA")
+    );
 
     const dispatch = useDispatch();
     const viewCoordinates = useSelector(
         (state) => state.locationSearchReducer && state.locationSearchReducer
     );
     useEffect(() => {
+        console.log("viewCoordinates", viewCoordinates);
+
         const body = {
             ltd: viewCoordinates.latitude,
             lgt: viewCoordinates.longitude,
@@ -67,6 +73,7 @@ export default function FilterBar() {
             low: sliderValue[0],
             hight: sliderValue[1],
             category: searchCategoryValue || ``,
+            date: searchDateValue,
         };
         console.log("body", body);
         const bodyJson = JSON.stringify(body);
@@ -80,9 +87,20 @@ export default function FilterBar() {
         })
             .then((res) => res.json())
             .then((result) => {
-                dispatch(receivedsearchData(result));
+                if (result.success === false) {
+                    return;
+                } else {
+                    dispatch(receivedsearchData(result));
+                    return;
+                }
             });
-    }, [viewCoordinates, sliderValue, searchNameValue, searchCategoryValue]);
+    }, [
+        viewCoordinates,
+        sliderValue,
+        searchNameValue,
+        searchCategoryValue,
+        searchDateValue,
+    ]);
 
     function disablePastDates() {
         const today = new Date();
@@ -96,6 +114,20 @@ export default function FilterBar() {
             day = "0" + day;
         }
         return `${year}-${month}-${day}`;
+    }
+
+    function handleResetClick(evt) {
+        evt.preventDefault();
+        setSliderValue([0, 700]);
+        setSearchNameValue();
+        setSearchCategoryValue();
+        setSearchDateValue(new Date().toLocaleDateString("en-CA"));
+        dispatch(
+            receviedViewState({
+                longitude: 13.376634503116708,
+                latitude: 52.536594783793284,
+            })
+        );
     }
 
     function updateRange(evt, data) {
@@ -112,6 +144,7 @@ export default function FilterBar() {
 
     return (
         <div className="filterBar">
+            <button onClick={handleResetClick}>Reset Filter</button>
             <div className="filterBarName">
                 <img src="/store.png"></img>
                 <input
@@ -122,7 +155,14 @@ export default function FilterBar() {
                 ></input>
             </div>
             <div className="filterBarDate">
-                <input type="date" name="date" min={disablePastDates()}></input>
+                <input
+                    type="date"
+                    name="date"
+                    defaultValue={new Date().toLocaleDateString("en-CA")}
+                    min={disablePastDates()}
+                    onChange={(evt) => setSearchDateValue(evt.target.value)}
+                    required
+                ></input>
             </div>
             <div className="filterBarCategories">
                 <select
@@ -152,10 +192,9 @@ export default function FilterBar() {
                     aria-labelledby="Price Range"
                     getAriaValueText={(value) => value}
                     min={0}
-                    max={600}
+                    max={700}
                 ></PriceRangeSlider>
             </div>
-            <button>Reset Filter</button>
         </div>
     );
 }

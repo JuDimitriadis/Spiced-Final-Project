@@ -23,6 +23,11 @@ export default function LocationSearch() {
                 ).values(),
             ]
     );
+
+    const viewCoordinates = useSelector(
+        (state) => state.locationSearchReducer && state.locationSearchReducer
+    );
+
     const [searchList, setSearchList] = useState();
     const [selectLocation, setSelectLocation] = useState();
     const [highlight, setHighlight] = useState();
@@ -40,6 +45,22 @@ export default function LocationSearch() {
             })
         );
     }, []);
+
+    useEffect(() => {
+        console.log("calling the useEffect");
+        if (
+            viewCoordinates.latitude != viewState.latitude ||
+            viewCoordinates.longitude != viewState.longitude
+        ) {
+            console.log("inside if of  the useEffect");
+            setViewState({
+                longitude: viewCoordinates.longitude,
+                latitude: viewCoordinates.latitude,
+            });
+            setSearchList(null);
+            setSelectLocation(null);
+        }
+    }, [viewCoordinates]);
 
     useEffect(() => {
         const clickClose = () => {
@@ -164,9 +185,6 @@ export default function LocationSearch() {
     return (
         <>
             <div className="locationSearch">
-                <h2 className="locationSearchTitle">
-                    Search for Beauty Professionals around you
-                </h2>
                 <form
                     className="addressQueryForm"
                     onSubmit={handleAddressQuerySubmit}
@@ -182,7 +200,7 @@ export default function LocationSearch() {
                             onKeyDown={handleInputKeyDown}
                             onClick={handleInputClick}
                         ></input>
-                        <button className="addressQueryBtn">Search</button>
+                        {/* <button className="addressQueryBtn">Search</button> */}
                     </div>
                 </form>
                 {searchList ? (

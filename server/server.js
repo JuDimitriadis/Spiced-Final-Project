@@ -71,10 +71,14 @@ app.get("/api/get-markers", (req, res) => {
 
 app.post("/api/get-search-data", (req, res) => {
     console.log("/api/get-search-data", req.body);
-    db.getSearchData(req.body).then((result) => {
-        // console.log("/api/get-search-data", result);
-        res.json(result);
-    });
+    if (!req.body.ltd || !req.body.lgt) {
+        res.json({ success: false });
+    } else {
+        db.getSearchData(req.body).then((result) => {
+            // console.log("/api/get-search-data", result);
+            res.json(result);
+        });
+    }
 });
 
 app.delete("/api/logout", (req, res) => {

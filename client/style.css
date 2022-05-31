@@ -173,9 +173,10 @@ body {
 .appLogo {
     font-family: "Homemade Apple", cursive;
     color: white;
-    font-size: 40px;
+    font-size: 50px;
     opacity: 0.4;
     margin: 20px;
+    text-shadow: #dd4991 2px 2px 4px;
 }
 
 .logoutIcon {
@@ -185,23 +186,108 @@ body {
     opacity: 0.4;
 }
 
+/* SEARCH RESULTS */
+
 .clientSearch {
     max-width: 100vw;
     display: flex;
     flex-direction: row;
+    align-items: space-between;
+    justify-content: flex-start;
+}
+
+.clientSearchTitle {
+    margin: 0;
+    text-align: center;
+    font-family: "Raleway Dots", cursive;
+    color: #dd4991;
+    font-size: 67px;
+    font-weight: 400;
+    text-shadow: black 2px 2px 4px;
+}
+
+.barSearchAndResults {
+    max-width: 55vw;
+    margin: 0 15px;
+}
+
+.clientSearchResults {
+    max-width: 52vw;
+    margin: 10px;
+}
+
+.eachReasult {
+    margin: 15px;
+    background-color: rgba(255, 255, 255, 0.068);
+    border-radius: 5px;
+    box-shadow: black 2px 2px 4px;
+}
+
+.eachResultName {
+    padding: 20px 0 0px 20px;
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: bolder;
+    color: #dd4991c2;
+    text-shadow: black 2px 2px 4px;
+    font-size: 40px;
+    margin: 0;
+}
+
+.eachResultAddress {
+    font-family: "Barlow Condensed", sans-serif;
+    padding: 0 0 0 20px;
+    margin: 0;
+    color: #ff85aaa2;
+    font-size: large;
+}
+
+.eachServiceData {
+    padding: 2px 40px 2px 40px;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    border-bottom: 1px dashed #dd49916c;
+    border-radius: 10px;
+}
+
+.eachServiceData p {
+    font-family: "Raleway", sans-serif;
+    color: rgba(255, 255, 255, 0.575);
+}
+
+.resultsTimeSlots {
+    margin: 10px;
+    background-color: #dd49911f;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+}
+
+.resultsTimeSlots p {
+    font-family: "Raleway", sans-serif;
+    margin: 5px 10px 10px 0;
+}
+
+.resultsTimeSlots::-webkit-scrollbar {
+    width: 12px;
+    /* border-radius: 5px; */
+}
+.resultsTimeSlots::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.068);
+    border-radius: 5px;
+}
+.resultsTimeSlots::-webkit-scrollbar-thumb {
+    background-color: #dd49916c;
+    border: 1px dashed rgba(0, 0, 0, 0.486);
+    border-radius: 5px;
 }
 
 /* LOCATION SEARCH */
 
-.locationSearchTitle {
-    text-align: center;
-    font-family: "Raleway", sans-serif;
-    color: rgba(255, 255, 255, 0.411);
-    font-size: x-large;
-    font-weight: bold;
-    text-shadow: black 2px 2px 4px;
+.locationSearch {
+    margin: 10px;
 }
 
 .addressQueryInputBox {
@@ -225,7 +311,7 @@ body {
 }
 
 .addressQueryInputBox input {
-    width: 350px;
+    width: 450px;
     height: 35px;
     background-color: transparent;
     border: 0px transparent;
@@ -255,9 +341,9 @@ body {
 }
 
 .searchResult {
+    margin: 10px;
     display: flex;
     align-items: center;
-    height: 40px;
     font-family: "Quattrocento Sans", sans-serif;
     font-weight: lighter;
     color: black;
@@ -293,55 +379,22 @@ body {
 /* FILTER BAR  */
 
 .filterBar {
-    margin-top: 45px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    width: 55vw;
 }
-/* .filterBarDate {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.filterBarCategories {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-} */
-
-/* 
-.filterBar input {
-    margin: 10px;
-    display: flex;
-    background-color: rgba(255, 255, 255, 0.432);
-    box-shadow: black 2px 2px 4px;
-    border-radius: 5px;
-    width: 180px;
-    height: 45px;
-} */
-
-/* .filterBar select {
-    margin: 10px;
-    display: flex;
-    background-color: rgba(255, 255, 255, 0.432);
-    box-shadow: black 2px 2px 4px;
-    border-radius: 5px;
-    width: 180px;
-    height: 45px;
-} */
 
 .filterBarSliderTypography {
     font-family: "Quattrocento Sans", sans-serif;
     font-weight: lighter;
     color: rgba(255, 255, 255, 0.582);
+    margin: 0 10px 10px 0;
 }
 
 .filterBarSlider {
-    margin: 10px;
+    margin: 5px 15px 5px 15px;
 }
 
 .filterBar button {

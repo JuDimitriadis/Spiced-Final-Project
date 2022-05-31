@@ -98,21 +98,33 @@ function getMarkersData() {
         .then((result) => result.rows);
 }
 
-function getSearchData({ ltd, lgt, name, low, hight, category }) {
-    console.log("DATA BASE REQ VALUES", ltd, lgt, name, low, hight, category);
+function getSearchData({ ltd, lgt, name, low, hight, category, date }) {
+    console.log(
+        "DATA BASE REQ VALUES",
+        ltd,
+        lgt,
+        name,
+        low,
+        hight,
+        category,
+        date
+    );
     if (category) {
         console.log("YES category", category);
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
-ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration
+ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time
 FROM professional_profile
 FULL JOIN services
 ON  professional_profile.id = services.professional_id
+JOIN appointaments 
+ON  professional_profile.id = appointaments.professional_id 
 WHERE ST_DWithin(geom, ST_MakePoint($1, $2)::geography, 5000)
 AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5 AND services.category = $6 
-ORDER BY services.price ASC`,
-                [ltd, lgt, name + "%", low, hight, category]
+AND appointaments.slot_date = $7 AND appointaments.booked = false
+ORDER BY appointaments.slot_time ASC`,
+                [ltd, lgt, name + "%", low, hight, category, date]
             )
             .then((result) => result.rows);
     } else {
@@ -120,18 +132,32 @@ ORDER BY services.price ASC`,
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
-    ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration
+    ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time
     FROM professional_profile
     FULL JOIN services
     ON  professional_profile.id = services.professional_id
+    JOIN appointaments 
+    ON  professional_profile.id = appointaments.professional_id 
     WHERE ST_DWithin(geom, ST_MakePoint($1, $2)::geography, 5000)
-    AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5 
-    ORDER BY services.price ASC`,
-                [ltd, lgt, name + "%", low, hight]
+    AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5
+    AND appointaments.slot_date = $6 AND appointaments.booked = false
+    ORDER BY appointaments.slot_time ASC`,
+                [ltd, lgt, name + "%", low, hight, date]
             )
-            .then((result) => result.rows);
+            .then((result) => {
+                return result.rows;
+            });
     }
 }
+
+// getSearchData({
+//     ltd: 52.536594783793284,
+//     lgt: 13.376634503116708,
+//     name: "The",
+//     low: 0,
+//     hight: 600,
+//     date: "2022-06-02",
+// });
 
 module.exports = {
     createClientAccount,
