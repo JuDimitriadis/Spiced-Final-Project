@@ -114,7 +114,7 @@ function getSearchData({ ltd, lgt, name, low, hight, category, date }) {
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
-ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time
+ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time, appointaments.slot_date
 FROM professional_profile
 FULL JOIN services
 ON  professional_profile.id = services.professional_id
@@ -124,7 +124,15 @@ WHERE ST_DWithin(geom, ST_MakePoint($1, $2)::geography, 5000)
 AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5 AND services.category = $6 
 AND appointaments.slot_date = $7 AND appointaments.booked = false
 ORDER BY appointaments.slot_time ASC`,
-                [ltd, lgt, name + "%", low, hight, category, date]
+                [
+                    ltd,
+                    lgt,
+                    name + "%",
+                    low,
+                    hight,
+                    category,
+                    date + "T22:00:00.000Z",
+                ]
             )
             .then((result) => result.rows);
     } else {
@@ -132,7 +140,7 @@ ORDER BY appointaments.slot_time ASC`,
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
-    ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time
+    ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time, appointaments.slot_date
     FROM professional_profile
     FULL JOIN services
     ON  professional_profile.id = services.professional_id
@@ -142,13 +150,26 @@ ORDER BY appointaments.slot_time ASC`,
     AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5
     AND appointaments.slot_date = $6 AND appointaments.booked = false
     ORDER BY appointaments.slot_time ASC`,
-                [ltd, lgt, name + "%", low, hight, date]
+                [ltd, lgt, name + "%", low, hight, `${date}`]
             )
             .then((result) => {
+                console.log(result.rows[2]);
                 return result.rows;
             });
     }
 }
+
+// SELECT professional_profile.id, professional_profile.name, professional_profile.address,
+//     ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time, appointaments.slot_date
+//     FROM professional_profile
+//     FULL JOIN services
+//     ON  professional_profile.id = services.professional_id
+//     JOIN appointaments
+//     ON  professional_profile.id = appointaments.professional_id
+//     WHERE ST_DWithin(geom, ST_MakePoint(52.536594783793284, 13.376634503116708)::geography, 5000)
+//     AND professional_profile.name ILIKE 'C%' AND services.price > 550 AND services.price < 650
+//     AND appointaments.slot_date = 2022-06-01 AND appointaments.booked = false
+//     ORDER BY appointaments.slot_time ASC
 
 // getSearchData({
 //     ltd: 52.536594783793284,

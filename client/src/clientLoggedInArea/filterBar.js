@@ -141,7 +141,7 @@ export default function FilterBar() {
             setSearchCategoryValue(newValue);
         }
     }
-
+    console.log("searchDateValue", searchDateValue);
     return (
         <div className="filterBar">
             <button onClick={handleResetClick}>Reset Filter</button>

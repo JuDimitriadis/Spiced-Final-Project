@@ -60,7 +60,8 @@ CREATE TABLE appointaments (
   professional_id   INT REFERENCES professional_profile (id) NOT NULL,
   service_id        INT REFERENCES services (id),
   category          VARCHAR(255) ,
-  slot_date_time    DATETIME DEFAULT NOT NULL,
+  slot_date         DATE NOT NULL,
+  slot_time         TIME NOT NULL,
   booked            BOOLEAN NOT NULL,
   user_id           INT REFERENCES clientAccounts (id),
   created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP

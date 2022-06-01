@@ -1,19 +1,25 @@
+import React from "react";
+import useCollapse from "react-collapsed";
 import { useEffect, useState, useRef } from "react";
 import LocationSearch from "./locationSearch";
 import FilterBar from "./filterBar";
-import BookingBox from "./bookingBox";
 import { useDispatch, useSelector } from "react-redux";
 import { receivedsearchData } from "../redux/searchAndResults/slicer";
 
 export default function SearchAndResults() {
     const [timeSelected, setTimeSelected] = useState({
         time: "",
+        date: "",
         professionalId: "",
     });
     const [serviceSelected, setServiceSelected] = useState({
         service: "",
+        duration: "",
         professionalId: "",
     });
+    const [expandId, setExpandId] = useState();
+    const [isExpanded, setIsExpanded] = useState(false);
+    const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded });
 
     const markersData = useSelector(
         (state) =>
@@ -60,6 +66,32 @@ export default function SearchAndResults() {
         }
     });
 
+    function handleExpandClick(id) {
+        if (!expandId) {
+            setExpandId(id);
+            setIsExpanded(true);
+            return;
+        }
+        if (id === expandId && isExpanded === false) {
+            setIsExpanded(true);
+            return;
+        }
+        if (id === expandId && isExpanded === true) {
+            setExpandId();
+            setIsExpanded(false);
+            return;
+        }
+        if (id != expandId && isExpanded === true) {
+            setExpandId(id);
+            return;
+        }
+        if (id != expandId && isExpanded === false) {
+            setExpandId(id);
+            setIsExpanded(true);
+            return;
+        }
+    }
+
     return (
         <>
             {" "}
@@ -105,6 +137,7 @@ export default function SearchAndResults() {
                                                                         setTimeSelected(
                                                                             {
                                                                                 time: eachSlot.slot_time,
+                                                                                date: eachSlot.slot_date,
                                                                                 professionalId:
                                                                                     each.id,
                                                                             }
@@ -151,6 +184,8 @@ export default function SearchAndResults() {
                                                                             {
                                                                                 service:
                                                                                     eachService.service_name,
+                                                                                duration:
+                                                                                    eachService.duration,
                                                                                 professionalId:
                                                                                     each.id,
                                                                             }
@@ -173,24 +208,84 @@ export default function SearchAndResults() {
                                                         }
                                                     }
                                                 )}
-                                            <p
-                                                className="searchResultLink"
-                                                // onClick={settingShowBookingBox}
-                                            >
-                                                Book Now
-                                            </p>
+                                            <div className="expandedContent">
+                                                {" "}
+                                                {expandId === each.id ? (
+                                                    <section
+                                                        {...getCollapseProps()}
+                                                    >
+                                                        {timeSelected.professionalId !=
+                                                        each.id ? (
+                                                            <p>
+                                                                Please select
+                                                                time
+                                                            </p>
+                                                        ) : null}
+                                                        {serviceSelected.professionalId !=
+                                                        each.id ? (
+                                                            <p>
+                                                                Please select
+                                                                service
+                                                            </p>
+                                                        ) : null}
+                                                        {serviceSelected.professionalId ===
+                                                            each.id &&
+                                                        timeSelected.professionalId ===
+                                                            each.id ? (
+                                                            <>
+                                                                <p>
+                                                                    Would you
+                                                                    like to
+                                                                    confirm the{" "}
+                                                                    {
+                                                                        serviceSelected.service
+                                                                    }
+                                                                    (
+                                                                    {
+                                                                        serviceSelected.duration
+                                                                    }
+                                                                    ) at{" "}
+                                                                    {
+                                                                        timeSelected.time
+                                                                    }{" "}
+                                                                    on{" "}
+                                                                    {timeSelected.date.slice(
+                                                                        8,
+                                                                        10
+                                                                    )}
+                                                                    /
+                                                                    {timeSelected.date.slice(
+                                                                        5,
+                                                                        7
+                                                                    )}
+                                                                    /
+                                                                    {timeSelected.date.slice(
+                                                                        0,
+                                                                        4
+                                                                    )}{" "}
+                                                                </p>
+                                                            </>
+                                                        ) : null}
+                                                    </section>
+                                                ) : null}
+                                                <p
+                                                    className="searchResultLink"
+                                                    {...getToggleProps({
+                                                        onClick: () => {
+                                                            handleExpandClick(
+                                                                each.id
+                                                            );
+                                                        },
+                                                    })}
+                                                >
+                                                    {" "}
+                                                    {isExpanded &&
+                                                    expandId === each.id
+                                                        ? "Close"
+                                                        : "Book Now"}
+                                                </p>
+                                            </div>
                                         </div>
-                                        {/* {showBookingbox ? (
-                                            <BookingBox
-                                                professionalId={
-                                                    each.professional_id
-                                                }
-                                                showBookingbox={showBookingbox}
-                                                onShowBookingBoxChange={
-                                                    settingShowBookingBox
-                                                }
-                                            ></BookingBox>
-                                        ) : null} */}
                                     </>
                                 );
                             })}
