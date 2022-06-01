@@ -47,12 +47,10 @@ export default function LocationSearch() {
     }, []);
 
     useEffect(() => {
-        console.log("calling the useEffect");
         if (
             viewCoordinates.latitude != viewState.latitude ||
             viewCoordinates.longitude != viewState.longitude
         ) {
-            console.log("inside if of  the useEffect");
             setViewState({
                 longitude: viewCoordinates.longitude,
                 latitude: viewCoordinates.latitude,

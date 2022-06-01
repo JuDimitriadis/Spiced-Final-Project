@@ -64,8 +64,6 @@ export default function FilterBar() {
         (state) => state.locationSearchReducer && state.locationSearchReducer
     );
     useEffect(() => {
-        console.log("viewCoordinates", viewCoordinates);
-
         const body = {
             ltd: viewCoordinates.latitude,
             lgt: viewCoordinates.longitude,
@@ -73,9 +71,9 @@ export default function FilterBar() {
             low: sliderValue[0],
             hight: sliderValue[1],
             category: searchCategoryValue || ``,
-            date: searchDateValue,
+            date: `${searchDateValue} 08:00:00`,
         };
-        console.log("body", body);
+        console.log("query req.body", body);
         const bodyJson = JSON.stringify(body);
 
         fetch("/api/get-search-data", {
@@ -141,7 +139,6 @@ export default function FilterBar() {
             setSearchCategoryValue(newValue);
         }
     }
-    console.log("searchDateValue", searchDateValue);
     return (
         <div className="filterBar">
             <button onClick={handleResetClick}>Reset Filter</button>

@@ -54,7 +54,7 @@ CREATE TABLE services (
   created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
+DROP TABLE IF EXISTS appointaments;
 CREATE TABLE appointaments (
   id                SERIAL PRIMARY KEY,
   professional_id   INT REFERENCES professional_profile (id) NOT NULL,

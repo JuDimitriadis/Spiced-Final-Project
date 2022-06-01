@@ -114,7 +114,7 @@ function getSearchData({ ltd, lgt, name, low, hight, category, date }) {
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
-ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time, appointaments.slot_date
+ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time, appointaments.slot_date, , appointaments.id as appointamentsId , services.id as serviceID
 FROM professional_profile
 FULL JOIN services
 ON  professional_profile.id = services.professional_id
@@ -140,7 +140,7 @@ ORDER BY appointaments.slot_time ASC`,
         return db
             .query(
                 `SELECT professional_profile.id, professional_profile.name, professional_profile.address,
-    ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time, appointaments.slot_date
+    ST_AsGeoJSON(professional_profile.geom)::jsonb as geoJSON,  services.service_name, services.category, services.price, services.duration, appointaments.slot_time, appointaments.slot_date, appointaments.id as appointamentsId , services.id as serviceID
     FROM professional_profile
     FULL JOIN services
     ON  professional_profile.id = services.professional_id
@@ -150,7 +150,7 @@ ORDER BY appointaments.slot_time ASC`,
     AND professional_profile.name ILIKE $3 AND services.price > $4 AND services.price < $5
     AND appointaments.slot_date = $6 AND appointaments.booked = false
     ORDER BY appointaments.slot_time ASC`,
-                [ltd, lgt, name + "%", low, hight, `${date}`]
+                [ltd, lgt, name + "%", low, hight, date]
             )
             .then((result) => {
                 console.log(result.rows[2]);
@@ -168,7 +168,7 @@ ORDER BY appointaments.slot_time ASC`,
 //     ON  professional_profile.id = appointaments.professional_id
 //     WHERE ST_DWithin(geom, ST_MakePoint(52.536594783793284, 13.376634503116708)::geography, 5000)
 //     AND professional_profile.name ILIKE 'C%' AND services.price > 550 AND services.price < 650
-//     AND appointaments.slot_date = 2022-06-01 AND appointaments.booked = false
+//     AND appointaments.slot_date = '2022-06-01' AND appointaments.booked = false
 //     ORDER BY appointaments.slot_time ASC
 
 // getSearchData({
@@ -180,9 +180,24 @@ ORDER BY appointaments.slot_time ASC`,
 //     date: "2022-06-02",
 // });
 
+function insertBooking({ serviceId, appointmentId }, userId) {
+    return db
+        .query(
+            ` UPDATE appointaments SET service_id = $1, booked = true, user_id = $2
+   WHERE id = $3
+   RETURNING *`,
+            [serviceId, userId, appointmentId]
+        )
+        .then((result) => {
+            console.log("DB result", result.rows);
+            return result.rows;
+        });
+}
+
 module.exports = {
     createClientAccount,
     clientAuthLogin,
     getMarkersData,
     getSearchData,
+    insertBooking,
 };

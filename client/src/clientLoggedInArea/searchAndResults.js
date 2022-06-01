@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import LocationSearch from "./locationSearch";
 import FilterBar from "./filterBar";
 import { useDispatch, useSelector } from "react-redux";
-import { receivedsearchData } from "../redux/searchAndResults/slicer";
+import { slotBooked } from "../redux/searchAndResults/slicer";
 
 export default function SearchAndResults() {
     const [timeSelected, setTimeSelected] = useState({
@@ -17,9 +17,14 @@ export default function SearchAndResults() {
         duration: "",
         professionalId: "",
     });
+    const [durationServiceSelected, setDurationServiceSelected] = useState();
+    const [convertedDateSelected, setConvertedDateSelected] = useState();
+    const [showBookingConfirmation, setShowBookingConfirmation] =
+        useState(false);
     const [expandId, setExpandId] = useState();
     const [isExpanded, setIsExpanded] = useState(false);
     const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded });
+    const dispatch = useDispatch();
 
     const markersData = useSelector(
         (state) =>
@@ -70,6 +75,7 @@ export default function SearchAndResults() {
         if (!expandId) {
             setExpandId(id);
             setIsExpanded(true);
+            setShowBookingConfirmation(false);
             return;
         }
         if (id === expandId && isExpanded === false) {
@@ -79,6 +85,7 @@ export default function SearchAndResults() {
         if (id === expandId && isExpanded === true) {
             setExpandId();
             setIsExpanded(false);
+            setShowBookingConfirmation(false);
             return;
         }
         if (id != expandId && isExpanded === true) {
@@ -88,9 +95,75 @@ export default function SearchAndResults() {
         if (id != expandId && isExpanded === false) {
             setExpandId(id);
             setIsExpanded(true);
+            setShowBookingConfirmation(false);
             return;
         }
     }
+
+    function convertingDuration(duration) {
+        const hours = +duration.slice(0, 2);
+        const minutes = +duration.slice(3, 5);
+        let convertedDuration;
+        if (hours === 0) {
+            convertedDuration = minutes + " minutes";
+            setDurationServiceSelected(convertedDuration);
+            return;
+        }
+        if (minutes === 0 && hours === 1) {
+            convertedDuration = hours + " hour";
+            setDurationServiceSelected(convertedDuration);
+            return;
+        }
+        if (minutes === 0 && hours > 1) {
+            convertedDuration = hours + " hours";
+            setDurationServiceSelected(convertedDuration);
+            return;
+        }
+        if (minutes > 1 && hours === 1) {
+            convertedDuration = hours + " hour and " + minutes + " minutes";
+            setDurationServiceSelected(convertedDuration);
+            return;
+        }
+        if (minutes > 1 && hours > 1) {
+            convertedDuration = hours + " hours and " + minutes + " minutes";
+            setDurationServiceSelected(convertedDuration);
+            return;
+        }
+    }
+
+    function convertingDate(date) {
+        const day = date.slice(8, 10);
+        const month = date.slice(5, 7);
+        const year = date.slice(0, 4);
+
+        setConvertedDateSelected(day + "/" + month + "/" + year);
+        return;
+    }
+
+    function handleBookingClick() {
+        const body = {
+            serviceId: serviceSelected.serviceId,
+            appointmentId: timeSelected.appointmentId,
+        };
+
+        const bodyJson = JSON.stringify(body);
+
+        fetch("/api/save-booking", {
+            method: "POST",
+            body: bodyJson,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log("fetch resul ", result[0].id);
+                dispatch(slotBooked(result[0].id));
+                setShowBookingConfirmation(true);
+            });
+    }
+
+    console.log("showBookingConfirmation", showBookingConfirmation);
 
     return (
         <>
@@ -115,7 +188,8 @@ export default function SearchAndResults() {
                                                     slots.map((eachSlot) => {
                                                         if (
                                                             eachSlot.id ===
-                                                            each.id
+                                                                each.id &&
+                                                            !eachSlot.booked
                                                         ) {
                                                             return (
                                                                 <p
@@ -131,12 +205,38 @@ export default function SearchAndResults() {
                                                                         eachSlot.slot_time
                                                                     }
                                                                     onClick={() => {
-                                                                        console.log(
-                                                                            "clicked"
+                                                                        if (
+                                                                            expandId !=
+                                                                            each.id
+                                                                        ) {
+                                                                            setExpandId();
+                                                                            setIsExpanded(
+                                                                                false
+                                                                            );
+                                                                        }
+                                                                        if (
+                                                                            showBookingConfirmation
+                                                                        ) {
+                                                                            setShowBookingConfirmation(
+                                                                                false
+                                                                            );
+                                                                            setTimeSelected(
+                                                                                {
+                                                                                    time: "",
+                                                                                    date: "",
+                                                                                    professionalId:
+                                                                                        "",
+                                                                                }
+                                                                            );
+                                                                        }
+                                                                        convertingDate(
+                                                                            eachSlot.slot_date
                                                                         );
                                                                         setTimeSelected(
                                                                             {
                                                                                 time: eachSlot.slot_time,
+                                                                                appointmentId:
+                                                                                    eachSlot.appointamentsid,
                                                                                 date: eachSlot.slot_date,
                                                                                 professionalId:
                                                                                     each.id,
@@ -144,10 +244,11 @@ export default function SearchAndResults() {
                                                                         );
                                                                     }}
                                                                 >
-                                                                    {eachSlot.slot_time.slice(
-                                                                        0,
-                                                                        5
-                                                                    )}
+                                                                    {eachSlot.slot_time &&
+                                                                        eachSlot.slot_time.slice(
+                                                                            0,
+                                                                            5
+                                                                        )}
                                                                 </p>
                                                             );
                                                         }
@@ -180,12 +281,30 @@ export default function SearchAndResults() {
                                                                             : "eachServiceData"
                                                                     }
                                                                     onClick={() => {
+                                                                        if (
+                                                                            expandId !=
+                                                                            each.id
+                                                                        ) {
+                                                                            setExpandId();
+                                                                            setIsExpanded(
+                                                                                false
+                                                                            );
+                                                                        }
+                                                                        setShowBookingConfirmation(
+                                                                            false
+                                                                        );
+                                                                        convertingDuration(
+                                                                            eachService.duration
+                                                                        );
                                                                         setServiceSelected(
                                                                             {
                                                                                 service:
                                                                                     eachService.service_name,
+                                                                                serviceId:
+                                                                                    eachService.serviceid,
                                                                                 duration:
                                                                                     eachService.duration,
+
                                                                                 professionalId:
                                                                                     each.id,
                                                                             }
@@ -216,14 +335,14 @@ export default function SearchAndResults() {
                                                     >
                                                         {timeSelected.professionalId !=
                                                         each.id ? (
-                                                            <p>
+                                                            <p className="expandedContentWarning">
                                                                 Please select
                                                                 time
                                                             </p>
                                                         ) : null}
                                                         {serviceSelected.professionalId !=
                                                         each.id ? (
-                                                            <p>
+                                                            <p className="expandedContentWarning">
                                                                 Please select
                                                                 service
                                                             </p>
@@ -231,38 +350,62 @@ export default function SearchAndResults() {
                                                         {serviceSelected.professionalId ===
                                                             each.id &&
                                                         timeSelected.professionalId ===
-                                                            each.id ? (
+                                                            each.id &&
+                                                        showBookingConfirmation ===
+                                                            false ? (
                                                             <>
-                                                                <p>
+                                                                <p className="expandedContentMsg">
                                                                     Would you
                                                                     like to
                                                                     confirm the{" "}
                                                                     {
                                                                         serviceSelected.service
-                                                                    }
-                                                                    (
-                                                                    {
-                                                                        serviceSelected.duration
-                                                                    }
-                                                                    ) at{" "}
-                                                                    {
-                                                                        timeSelected.time
                                                                     }{" "}
-                                                                    on{" "}
-                                                                    {timeSelected.date.slice(
-                                                                        8,
-                                                                        10
-                                                                    )}
-                                                                    /
-                                                                    {timeSelected.date.slice(
-                                                                        5,
-                                                                        7
-                                                                    )}
-                                                                    /
-                                                                    {timeSelected.date.slice(
+                                                                    at{" "}
+                                                                    {timeSelected.time.slice(
                                                                         0,
-                                                                        4
+                                                                        5
                                                                     )}{" "}
+                                                                    on{" "}
+                                                                    {
+                                                                        convertedDateSelected
+                                                                    }{" "}
+                                                                </p>
+                                                                <p className="expandedContentMsg">
+                                                                    This service
+                                                                    takes about{" "}
+                                                                    {
+                                                                        durationServiceSelected
+                                                                    }
+                                                                </p>
+                                                                <button
+                                                                    className="expandedContentBtn"
+                                                                    onClick={
+                                                                        handleBookingClick
+                                                                    }
+                                                                >
+                                                                    Confirm
+                                                                    Booking
+                                                                </button>
+                                                            </>
+                                                        ) : null}
+                                                        {expandId === each.id &&
+                                                        showBookingConfirmation ===
+                                                            true ? (
+                                                            <>
+                                                                {" "}
+                                                                <p className="expandedContentMsg">
+                                                                    Cool! Your
+                                                                    booking is
+                                                                    saved. You
+                                                                    you can
+                                                                    check it out
+                                                                    at any time
+                                                                    in{" "}
+                                                                    <strong>
+                                                                        My
+                                                                        Bookings
+                                                                    </strong>
                                                                 </p>
                                                             </>
                                                         ) : null}

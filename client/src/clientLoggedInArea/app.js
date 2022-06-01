@@ -7,7 +7,6 @@ export default function App() {
         })
             .then((res) => res.json())
             .then((result) => {
-                console.log(result);
                 if (result.success === true) {
                     location.reload();
                 }

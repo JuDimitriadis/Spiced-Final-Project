@@ -172,11 +172,11 @@ body {
 
 .appLogo {
     font-family: "Homemade Apple", cursive;
-    color: white;
+    color: rgba(255, 255, 255, 0.836);
     font-size: 50px;
     opacity: 0.4;
     margin: 20px;
-    text-shadow: #dd4991 2px 2px 4px;
+    text-shadow: #dd4991 4px 4px 4px;
 }
 
 .logoutIcon {
@@ -255,6 +255,8 @@ body {
 
 .eachServiceData:hover {
     color: #dd499186;
+    cursor: pointer;
+    transition: ease-in-out 0.5s;
 }
 .eachServiceDataSelected {
     background-color: #dd49912f;
@@ -288,6 +290,7 @@ body {
 .resultsTimeSlots p:hover {
     color: rgba(255, 255, 255, 0.342);
     cursor: pointer;
+    transition: ease-in-out 0.2s;
 }
 
 .resultsTimeSlots::-webkit-scrollbar {
@@ -321,6 +324,35 @@ body {
     box-shadow: #dd4991 2px 2px 4px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.expandedContentWarning {
+    padding: 10px;
+    font-family: "Barlow Condensed", sans-serif;
+    color: #dd4991a8;
+    font-size: larger;
+}
+
+.expandedContentMsg {
+    padding: 10px;
+    font-family: "Raleway", sans-serif;
+    font-size: large;
+    color: #dd4991d2;
+    text-shadow: black 2px 2px 4px;
+}
+
+.expandedContentBtn {
+    margin: 10px;
+    width: 120px;
+    height: 45px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.473);
+    text-shadow: black 2px 2px 4px;
+    font-size: large;
+    font-weight: lighter;
+    font-family: "Barlow Condensed", sans-serif;
+    background-color: #dd49918e;
+    border-radius: 5px;
 }
 
 /* LOCATION SEARCH */

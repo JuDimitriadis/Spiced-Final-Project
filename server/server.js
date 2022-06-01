@@ -31,7 +31,6 @@ app.get("/api/check-cookie-id", (req, res) => {
 
 //API SERVING clientLoginRegistration.js
 app.post("/api/create-client-account", async (req, res) => {
-    console.log("body", req.body);
     db.createClientAccount(req.body)
         .then((new_user) => {
             const newId = { id: new_user.id };
@@ -69,6 +68,7 @@ app.get("/api/get-markers", (req, res) => {
     });
 });
 
+//API SERVING filterbar.js
 app.post("/api/get-search-data", (req, res) => {
     console.log("/api/get-search-data", req.body);
     if (!req.body.ltd || !req.body.lgt) {
@@ -79,6 +79,15 @@ app.post("/api/get-search-data", (req, res) => {
             res.json(result);
         });
     }
+});
+
+//API SERVING searchAndResults.js
+app.post("/api/save-booking", (req, res) => {
+    console.log(req.body);
+    db.insertBooking(req.body, req.session.id).then((result) => {
+        console.log("server result", result);
+        res.json(result);
+    });
 });
 
 app.delete("/api/logout", (req, res) => {
