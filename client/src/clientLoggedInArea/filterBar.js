@@ -73,7 +73,6 @@ export default function FilterBar() {
             category: searchCategoryValue || ``,
             date: `${searchDateValue} 08:00:00`,
         };
-        console.log("query req.body", body);
         const bodyJson = JSON.stringify(body);
 
         fetch("/api/get-search-data", {
@@ -156,7 +155,7 @@ export default function FilterBar() {
                     type="date"
                     name="date"
                     defaultValue={new Date().toLocaleDateString("en-CA")}
-                    min={disablePastDates()}
+                    // min={disablePastDates()}
                     onChange={(evt) => setSearchDateValue(evt.target.value)}
                     required
                 ></input>

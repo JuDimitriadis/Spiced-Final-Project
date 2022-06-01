@@ -85,11 +85,26 @@ app.post("/api/get-search-data", (req, res) => {
 app.post("/api/save-booking", (req, res) => {
     console.log(req.body);
     db.insertBooking(req.body, req.session.id).then((result) => {
-        console.log("server result", result);
         res.json(result);
     });
 });
 
+//API SERVING muBookings.js
+app.delete("/api/save-booking", (req, res) => {
+    console.log(req.body);
+    db.cancelBooking(req.body).then((result) => {
+        res.json(result);
+    });
+});
+
+//API SERVING muBookings.js
+app.get("/api/get-bookings", (req, res) => {
+    db.getAppointments(req.session.id).then((result) => {
+        res.json(result);
+    });
+});
+
+//API SERVING app.js
 app.delete("/api/logout", (req, res) => {
     req.session = null;
     res.json({ success: true });

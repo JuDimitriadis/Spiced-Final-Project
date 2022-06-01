@@ -104,7 +104,6 @@ function makeSlots(id, date) {
     );
 }
 
-makeSlots(1, "2022-08-01 08:00:00");
 makeSlots(1, "2022-06-01 08:00:00");
 makeSlots(1, "2022-06-02 08:00:00");
 makeSlots(1, "2022-06-03 08:00:00");

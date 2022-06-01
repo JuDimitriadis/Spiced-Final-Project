@@ -165,18 +165,23 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    /* position: absolute;
-    top: 0;
-    right: 0; */
 }
 
 .appLogo {
     font-family: "Homemade Apple", cursive;
-    color: rgba(255, 255, 255, 0.836);
+    /* color: rgba(255, 255, 255, 0.836); */
+    color: black;
     font-size: 50px;
-    opacity: 0.4;
+    opacity: 0.5;
     margin: 20px;
     text-shadow: #dd4991 4px 4px 4px;
+}
+
+.logOutAndMyBookings {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
 }
 
 .logoutIcon {
@@ -184,6 +189,81 @@ body {
     width: 35px;
     height: 35px;
     opacity: 0.4;
+}
+
+/* MY BOOKINGS */
+
+.myBookingContainer {
+    border-radius: 5px;
+    border: 1px dashed #dd499142;
+    box-shadow: #dd499142 2px 2px 4px;
+    margin: 0px 25px 0 10px;
+    /* background-color: rgba(255, 255, 255, 0.178); */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.myBookings {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 2px 15px;
+}
+
+.myBookingsTitle {
+    font-family: "Raleway", sans-serif;
+    color: #dd499188;
+    text-shadow: black 2px 2px 4px;
+    margin: 0;
+}
+
+.myBookingsClose {
+    font-family: "Raleway", sans-serif;
+    color: #dd499188;
+    text-shadow: black 2px 2px 4px;
+    margin: 0;
+}
+
+.myBookingsMsg {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: lighter;
+    color: #ff85aa5b;
+    margin: 5px 0 0 0;
+}
+
+.myBookingsListTitle {
+    font-family: "Raleway", sans-serif;
+    color: #dd499188;
+    text-shadow: black 2px 2px 4px;
+    margin: 5px;
+    font-size: medium;
+}
+
+.eachBooking {
+    display: grid;
+    grid-template-columns: 5fr 5fr 2fr 2fr 3fr 3fr;
+    max-width: 45vw;
+    text-align: left;
+}
+
+.eachBooking p {
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: lighter;
+    color: rgba(255, 255, 255, 0.205);
+    margin: 5px;
+}
+
+.myBookingsBtn {
+    margin: 5px 2px 5px 10px;
+    width: 65px;
+    text-align: center;
+    color: black;
+    font-size: small;
+    font-weight: bold;
+    font-family: "Raleway", sans-serif;
+    background-color: #dd49913a;
+    border-radius: 5px;
 }
 
 /* SEARCH RESULTS */

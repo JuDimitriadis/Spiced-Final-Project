@@ -5,6 +5,7 @@ import LocationSearch from "./locationSearch";
 import FilterBar from "./filterBar";
 import { useDispatch, useSelector } from "react-redux";
 import { slotBooked } from "../redux/searchAndResults/slicer";
+import { receivedBookingList } from "../redux/myBookings/slicer";
 
 export default function SearchAndResults() {
     const [timeSelected, setTimeSelected] = useState({
@@ -157,13 +158,17 @@ export default function SearchAndResults() {
         })
             .then((res) => res.json())
             .then((result) => {
-                console.log("fetch resul ", result[0].id);
                 dispatch(slotBooked(result[0].id));
                 setShowBookingConfirmation(true);
+            })
+            .then(() => {
+                fetch("/api/get-bookings")
+                    .then((res) => res.json())
+                    .then((result) => {
+                        dispatch(receivedBookingList(result));
+                    });
             });
     }
-
-    console.log("showBookingConfirmation", showBookingConfirmation);
 
     return (
         <>

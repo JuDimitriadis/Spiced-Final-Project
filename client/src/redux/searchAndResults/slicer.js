@@ -15,7 +15,6 @@ export function searchAndResultsReducer(searchAndResults = [], action) {
             }
         });
     }
-    console.log("reducer final", searchAndResults);
     return searchAndResults;
 }
 

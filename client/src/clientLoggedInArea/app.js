@@ -1,3 +1,4 @@
+import MyBookings from "./myBookings";
 import SearchAndResults from "./searchAndResults";
 
 export default function App() {
@@ -20,12 +21,16 @@ export default function App() {
                 <header className="clientAppHeader">
                     {" "}
                     <h1 className="appLogo"> The Beauty Booking</h1>
-                    <img
-                        className="logoutIcon"
-                        src="/logout.png"
-                        onClick={logout}
-                    ></img>{" "}
+                    <div className="logOutAndMyBookings">
+                        <img
+                            className="logoutIcon"
+                            src="/logout.png"
+                            onClick={logout}
+                        ></img>{" "}
+                        <MyBookings></MyBookings>
+                    </div>
                 </header>
+
                 <SearchAndResults></SearchAndResults>
             </div>
         </>

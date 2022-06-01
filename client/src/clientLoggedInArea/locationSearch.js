@@ -179,7 +179,6 @@ export default function LocationSearch() {
         );
     }
 
-    console.log("markersData", markersData);
     return (
         <>
             <div className="locationSearch">

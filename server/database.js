@@ -153,7 +153,6 @@ ORDER BY appointaments.slot_time ASC`,
                 [ltd, lgt, name + "%", low, hight, date]
             )
             .then((result) => {
-                console.log(result.rows[2]);
                 return result.rows;
             });
     }
@@ -189,7 +188,38 @@ function insertBooking({ serviceId, appointmentId }, userId) {
             [serviceId, userId, appointmentId]
         )
         .then((result) => {
-            console.log("DB result", result.rows);
+            return result.rows;
+        });
+}
+
+function getAppointments(userId) {
+    return db
+        .query(
+            ` SELECT  appointaments.id as slotId ,appointaments.professional_id, appointaments.service_id, appointaments.user_id, appointaments.slot_time, appointaments.slot_date,  services.service_name, services.category, services.price, services.duration, professional_profile.name, professional_profile.address
+   FROM appointaments
+   JOIN services
+   ON services.id = appointaments.service_id
+   JOIN professional_profile
+   ON professional_profile.id = appointaments.professional_id
+   WHERE appointaments.booked = true AND appointaments.user_id = $1
+   ORDER BY appointaments.slot_date, appointaments.slot_time`,
+            [userId]
+        )
+        .then((result) => {
+            console.log("DB GET APPOINTMENTS", result.rows[0]);
+            return result.rows;
+        });
+}
+
+function cancelBooking({ slotid }) {
+    return db
+        .query(
+            ` UPDATE appointaments SET service_id = null, booked = false, user_id = null
+   WHERE id = $1
+   RETURNING *`,
+            [slotid]
+        )
+        .then((result) => {
             return result.rows;
         });
 }
@@ -200,4 +230,6 @@ module.exports = {
     getMarkersData,
     getSearchData,
     insertBooking,
+    getAppointments,
+    cancelBooking,
 };
