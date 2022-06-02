@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from "react";
 import useCollapse from "react-collapsed";
 import { useEffect, useState, useRef } from "react";
@@ -8,6 +9,15 @@ import { slotBooked } from "../redux/searchAndResults/slicer";
 import { receivedBookingList } from "../redux/myBookings/slicer";
 
 export default function SearchAndResults() {
+    const [searchNameValue, setSearchNameValue] = useState();
+    const [selectedMarker, setSelectedMarker] = useState();
+    const [selectLocation, setSelectLocation] = useState();
+    const [viewState, setViewState] = useState({
+        longitude: 13.376634503116708,
+        latitude: 52.536594783793284,
+        zoom: 10,
+    });
+
     const [timeSelected, setTimeSelected] = useState({
         time: "",
         date: "",
@@ -178,7 +188,16 @@ export default function SearchAndResults() {
             </h2>
             <div className="clientSearch">
                 <div className="barSearchAndResults">
-                    <FilterBar></FilterBar>
+                    <FilterBar
+                        searchNameValue={searchNameValue}
+                        onSearchNameValueChange={setSearchNameValue}
+                        selectedMarker={selectedMarker}
+                        onSelectedMarkerChange={setSelectedMarker}
+                        viewState={viewState}
+                        onViewStateChange={setViewState}
+                        selectLocation={selectLocation}
+                        onSelectLocationChange={setSelectLocation}
+                    ></FilterBar>
                     <div className="clientSearchResults">
                         {markersData &&
                             markersData.map((each) => {
@@ -439,7 +458,16 @@ export default function SearchAndResults() {
                             })}
                     </div>
                 </div>
-                <LocationSearch></LocationSearch>
+                <LocationSearch
+                    searchNameValue={searchNameValue}
+                    onSearchNameValueChange={setSearchNameValue}
+                    selectedMarker={selectedMarker}
+                    onSelectedMarkerChange={setSelectedMarker}
+                    viewState={viewState}
+                    onViewStateChange={setViewState}
+                    selectLocation={selectLocation}
+                    onSelectLocationChange={setSelectLocation}
+                ></LocationSearch>
             </div>
         </>
     );

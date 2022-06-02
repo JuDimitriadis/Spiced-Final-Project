@@ -51,22 +51,31 @@ const PriceRangeSlider = withStyles({
     },
 })(Slider);
 
-export default function FilterBar() {
+export default function FilterBar({
+    searchNameValue,
+    onSearchNameValueChange,
+    selectedMarker,
+    onSelectedMarkerChange,
+    viewState,
+    onViewStateChange,
+    selectLocation,
+    onSelectLocationChange,
+}) {
     const [sliderValue, setSliderValue] = useState([0, 700]);
-    const [searchNameValue, setSearchNameValue] = useState();
+    // const [searchNameValue, setSearchNameValue] = useState();
     const [searchCategoryValue, setSearchCategoryValue] = useState();
     const [searchDateValue, setSearchDateValue] = useState(
         new Date().toLocaleDateString("en-CA")
     );
 
     const dispatch = useDispatch();
-    const viewCoordinates = useSelector(
-        (state) => state.locationSearchReducer && state.locationSearchReducer
-    );
+    // const viewCoordinates = useSelector(
+    //     (state) => state.locationSearchReducer && state.locationSearchReducer
+    // );
     useEffect(() => {
         const body = {
-            ltd: viewCoordinates.latitude,
-            lgt: viewCoordinates.longitude,
+            ltd: viewState.latitude,
+            lgt: viewState.longitude,
             name: searchNameValue || ``,
             low: sliderValue[0],
             hight: sliderValue[1],
@@ -88,11 +97,12 @@ export default function FilterBar() {
                     return;
                 } else {
                     dispatch(receivedsearchData(result));
+                    onSelectedMarkerChange(null);
                     return;
                 }
             });
     }, [
-        viewCoordinates,
+        viewState,
         sliderValue,
         searchNameValue,
         searchCategoryValue,
@@ -116,15 +126,22 @@ export default function FilterBar() {
     function handleResetClick(evt) {
         evt.preventDefault();
         setSliderValue([0, 700]);
-        setSearchNameValue();
+        onSearchNameValueChange("");
+        onSelectLocationChange("");
+        onViewStateChange({
+            longitude: 13.376634503116708,
+            latitude: 52.536594783793284,
+            zoom: 10,
+        });
         setSearchCategoryValue();
         setSearchDateValue(new Date().toLocaleDateString("en-CA"));
-        dispatch(
-            receviedViewState({
-                longitude: 13.376634503116708,
-                latitude: 52.536594783793284,
-            })
-        );
+
+        // dispatch(
+        //     receviedViewState({
+        //         longitude: 13.376634503116708,
+        //         latitude: 52.536594783793284,
+        //     })
+        // );
     }
 
     function updateRange(evt, data) {
@@ -138,6 +155,7 @@ export default function FilterBar() {
             setSearchCategoryValue(newValue);
         }
     }
+
     return (
         <div className="filterBar">
             <button onClick={handleResetClick}>Reset Filter</button>
@@ -147,7 +165,10 @@ export default function FilterBar() {
                     type="text"
                     name="name"
                     placeholder="Name"
-                    onChange={(evt) => setSearchNameValue(evt.target.value)}
+                    value={searchNameValue}
+                    onChange={(evt) =>
+                        onSearchNameValueChange(evt.target.value)
+                    }
                 ></input>
             </div>
             <div className="filterBarDate">
@@ -155,7 +176,7 @@ export default function FilterBar() {
                     type="date"
                     name="date"
                     defaultValue={new Date().toLocaleDateString("en-CA")}
-                    // min={disablePastDates()}
+                    min={disablePastDates()}
                     onChange={(evt) => setSearchDateValue(evt.target.value)}
                     required
                 ></input>

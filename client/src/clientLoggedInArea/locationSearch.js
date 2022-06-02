@@ -9,7 +9,16 @@ import { receviedViewState } from "../redux/locationSearch/slicer";
 
 mapboxgl.accessToken = mapbox_token;
 
-export default function LocationSearch() {
+export default function LocationSearch({
+    searchNameValue,
+    onSearchNameValueChange,
+    selectedMarker,
+    onSelectedMarkerChange,
+    viewState,
+    onViewStateChange,
+    selectLocation,
+    onSelectLocationChange,
+}) {
     const geocoder = GeocoderService({
         accessToken: mapbox_token,
     });
@@ -29,13 +38,7 @@ export default function LocationSearch() {
     );
 
     const [searchList, setSearchList] = useState();
-    const [selectLocation, setSelectLocation] = useState();
     const [highlight, setHighlight] = useState();
-    const [viewState, setViewState] = useState({
-        longitude: 13.376634503116708,
-        latitude: 52.536594783793284,
-        zoom: 10,
-    });
 
     useEffect(() => {
         dispatch(
@@ -51,12 +54,12 @@ export default function LocationSearch() {
             viewCoordinates.latitude != viewState.latitude ||
             viewCoordinates.longitude != viewState.longitude
         ) {
-            setViewState({
+            onViewStateChange({
                 longitude: viewCoordinates.longitude,
                 latitude: viewCoordinates.latitude,
             });
             setSearchList(null);
-            setSelectLocation(null);
+            onSelectLocationChange(null);
         }
     }, [viewCoordinates]);
 
@@ -76,7 +79,7 @@ export default function LocationSearch() {
     async function handleAddressQuery(evt) {
         serachVal = evt.target.value;
         const query = evt.target.value;
-        setSelectLocation(query);
+        onSelectLocationChange(query);
         const response = await geocoder
             .forwardGeocode({ query, limit: 5 })
             .send();
@@ -89,7 +92,7 @@ export default function LocationSearch() {
 
     async function handleAddressQuerySubmit(evt) {
         evt.preventDefault();
-        setViewState({
+        onViewStateChange({
             longitude: searchList.geometry.coordinates[0],
             latitude: searchList.geometry.coordinates[1],
             zoom: 11,
@@ -112,8 +115,8 @@ export default function LocationSearch() {
     }
 
     function handleLocationClick([lgt, ltd], name) {
-        setSelectLocation(name);
-        setViewState({
+        onSelectLocationChange(name);
+        onViewStateChange({
             longitude: lgt,
             latitude: ltd,
             zoom: 11,
@@ -181,6 +184,7 @@ export default function LocationSearch() {
 
     return (
         <>
+            {" "}
             <div className="locationSearch">
                 <form
                     className="addressQueryForm"
@@ -232,7 +236,7 @@ export default function LocationSearch() {
                     mapStyle="mapbox://styles/mapbox/streets-v11"
                     className="mapContainer"
                     mapboxApiAccessToken={mapbox_token}
-                    onMove={(evt) => setViewState(evt.viewState)}
+                    onMove={(evt) => onViewStateChange(evt.viewState)}
                     onMoveEnd={(evt) => handleMoveEnd(evt.viewState)}
                 >
                     {markersData &&
@@ -242,11 +246,43 @@ export default function LocationSearch() {
                                 longitude={data.geojson.coordinates[1]}
                                 latitude={data.geojson.coordinates[0]}
                             >
-                                <button className="mapMarkerBtn">
+                                <button
+                                    className="mapMarkerBtn"
+                                    onClick={(evt) => {
+                                        evt.preventDefault();
+                                        onSelectedMarkerChange(data);
+                                        console.log("CLICKED", evt);
+                                    }}
+                                >
                                     <img src={`/${data.category}.png`}></img>
                                 </button>
                             </Marker>
                         ))}
+                    {selectedMarker ? (
+                        <Popup
+                            longitude={selectedMarker.geojson.coordinates[1]}
+                            latitude={selectedMarker.geojson.coordinates[0]}
+                            onClose={() => {
+                                onSelectedMarkerChange(null);
+                            }}
+                        >
+                            <div className="popupContainer">
+                                <h2
+                                    className="popupContainerTitle"
+                                    onClick={() =>
+                                        onSearchNameValueChange(
+                                            selectedMarker.name
+                                        )
+                                    }
+                                >
+                                    {selectedMarker.name}
+                                </h2>
+                                <p className="popupContainerAddress">
+                                    {selectedMarker.address}
+                                </p>
+                            </div>
+                        </Popup>
+                    ) : null}
                 </ReactMapGL>
             </div>
         </>
