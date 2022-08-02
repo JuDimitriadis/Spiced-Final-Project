@@ -12,7 +12,8 @@
         "test": "jest"
     },
     "engines": {
-        "node": "v16.14.0"
+        "node": "v16.14.0",
+        "npm": "8.15.1"
     },
     "dependencies": {
         "@babel/cli": "^7.12.10",
