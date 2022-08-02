@@ -26,7 +26,7 @@ export default function LocationSearch({
     onSelectLocationChange,
 }) {
     const geocoder = GeocoderService({
-        accessToken: mapbox_token,
+        accessToken: mapbox_token.mapbox_token,
     });
     const dispatch = useDispatch();
 
