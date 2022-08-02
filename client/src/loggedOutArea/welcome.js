@@ -24,10 +24,10 @@ export default function Welcome() {
             <div className="shadowWelcome">
                 <h1 className="welcomeLogo"> The Beauty Booking</h1>
                 <ClientLoginRegistration></ClientLoginRegistration>
-                <p className="beautyProviderLink">
+                {/* <p className="beautyProviderLink">
                     If you are a Beauty Provider&nbsp;
                     <strong> Click Here</strong>
-                </p>
+                </p> */}
             </div>
         </>
     );

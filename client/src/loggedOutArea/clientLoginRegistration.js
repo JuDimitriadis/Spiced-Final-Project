@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
+import ResetPassword from "./resetPassword";
 
 export default function ClientLoginRegistration() {
     const [showLogin, setShowLogin] = useState(true);
     const [showCreatAccount, setShowCreatAccount] = useState(false);
+    const [showResetPassword, setShowResetPassword] = useState(false);
     const [error, setError] = useState();
 
     function handleAccountClick() {
         setShowLogin(false);
+        setShowResetPassword(false);
         setError(null);
         // setAccountType(null);
         setShowCreatAccount(true);
@@ -14,9 +17,20 @@ export default function ClientLoginRegistration() {
 
     function handleLoginClick() {
         setShowCreatAccount(false);
+        setShowResetPassword(false);
         setError(null);
         // setAccountType(null);
+
         setShowLogin(true);
+    }
+
+    function handleResetPassClick() {
+        setShowCreatAccount(false);
+        setShowLogin(false);
+        setError(null);
+        // setAccountType(null);
+
+        setShowResetPassword(true);
     }
 
     function handleLoginSubmit(evt) {
@@ -155,7 +169,9 @@ export default function ClientLoginRegistration() {
                         </form>
                         <div className="welcomeLinks">
                             <p onClick={handleAccountClick}>Create Account</p>
-                            <p>Forgot Password?</p>
+                            <p onClick={handleResetPassClick}>
+                                Forgot Password?
+                            </p>
                         </div>
                     </>
                 ) : null}
@@ -211,6 +227,11 @@ export default function ClientLoginRegistration() {
                             <p onClick={handleLoginClick}>Login</p>
                         </div>
                     </>
+                ) : null}
+                {showResetPassword ? (
+                    <ResetPassword
+                        onLoginClick={handleLoginClick}
+                    ></ResetPassword>
                 ) : null}
             </div>
         </>

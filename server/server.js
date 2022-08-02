@@ -4,6 +4,7 @@ const compression = require("compression");
 const path = require("path");
 const cookieSession = require("cookie-session");
 const db = require("./database");
+const ses = require("./ses.js");
 
 app.use(express.json());
 
@@ -108,6 +109,60 @@ app.get("/api/get-bookings", (req, res) => {
 app.delete("/api/logout", (req, res) => {
     req.session = null;
     res.json({ success: true });
+});
+
+//API SERVING resetPassword.js
+app.put("/reset-password", (req, res) => {
+    const { email, code, password } = req.body;
+    db.checkResetCode(email, code)
+        .then((result) => {
+            if (!result) {
+                return false;
+            } else {
+                const resetEmail = { email: result.email };
+                req.session = resetEmail;
+                return result;
+            }
+        })
+        .then((result) => {
+            if (!result) {
+                return res.json({ success: false });
+            } else {
+                return db
+                    .changePassword(password, result.user_id)
+                    .then((result) => {
+                        if (!result) {
+                            return res.json({ success: false });
+                        } else {
+                            const loginId = { id: result.id };
+                            req.session = loginId;
+                            // res.redirect("/");
+                            res.json({ success: true });
+                        }
+                    });
+            }
+        });
+});
+
+//API SERVING resetPassword.js
+app.post("/reset-password", (req, res) => {
+    db.resetCode(req.body.email)
+        .then((result) => {
+            if (result === "user not found") {
+                return res.json({ success: "user not found" });
+            } else {
+                return ses.sendEmail(
+                    "julianaspdimitriadis@gmail.com",
+                    result.rows[0].code
+                );
+            }
+        })
+        .then(() => {
+            return res.json({ success: true });
+        })
+        .catch((error) => {
+            console.log("ERROR Post - Reset-password", error);
+        });
 });
 
 app.get("*", function (req, res) {

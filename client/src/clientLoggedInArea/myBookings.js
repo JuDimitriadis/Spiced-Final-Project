@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useCollapse from "react-collapsed";
+// import ReviewWrite from "./reviewWrite";
 import { receivedsearchData } from "../redux/searchAndResults/slicer";
 import { receviedViewState } from "../redux/locationSearch/slicer";
 import {
@@ -14,24 +15,38 @@ export default function MyBookings() {
     const dispatch = useDispatch();
     const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded });
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showReviewWrite, setShowReviewWrite] = useState(true);
 
     const upcomingBooking = useSelector((state) => {
         const date = new Date();
         const year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
+        let hour = date.getHours();
+
         if (month < 10) {
             month = "0" + month;
         }
         if (day < 10) {
             day = "0" + day;
         }
+        if (hour < 10) {
+            hour = "0" + hour;
+        }
         const today = `${year}-${month}-${day}`;
+        const time = `${hour}:00:00`;
         const newArray = [];
         state.myBookingsReducer &&
             state.myBookingsReducer.map((item) => {
                 const itemDate = item.slot_date.slice(0, 10);
-                if (itemDate >= today && item.user_id) {
+                if (itemDate > today && item.user_id) {
+                    newArray.push(item);
+                    return;
+                } else if (
+                    itemDate === today &&
+                    item.slot_time > time &&
+                    item.user_id
+                ) {
                     newArray.push(item);
                     return;
                 } else {
@@ -46,18 +61,27 @@ export default function MyBookings() {
         const year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
+        let hour = date.getHours();
+
         if (month < 10) {
             month = "0" + month;
         }
         if (day < 10) {
             day = "0" + day;
         }
+        if (hour < 10) {
+            hour = "0" + hour;
+        }
         const today = `${year}-${month}-${day}`;
+        const time = `${hour}:00:00`;
         const newArray = [];
         state.myBookingsReducer &&
             state.myBookingsReducer.map((item) => {
                 const itemDate = item.slot_date.slice(0, 10);
                 if (itemDate < today) {
+                    newArray.push(item);
+                    return;
+                } else if (itemDate === today && item.slot_time <= time) {
                     newArray.push(item);
                     return;
                 } else {
@@ -114,87 +138,100 @@ export default function MyBookings() {
     // console.log(("pastBookings", pastBookings));
 
     return (
-        <div className="myBookingContainer">
-            <div
-                className="myBookings"
-                {...getToggleProps({ onClick: handleMyBookingsClick })}
-            >
-                {" "}
-                {isExpanded ? (
-                    <p className="myBookingsClose">Close</p>
-                ) : (
-                    <h3 className="myBookingsTitle">My Bookings</h3>
-                )}
-                {!isExpanded && upcomingBooking.length > 0 ? (
-                    <p className="myBookingsMsg">
-                        You have {upcomingBooking.length} upcoming bookings.
-                    </p>
-                ) : null}
-                {!isExpanded && upcomingBooking.length === 0 ? (
-                    // eslint-disable-next-line react/no-unescaped-entities
-                    <p className="myBookingsMsg">
-                        {" "}
-                        You don't have upcoming bookings.
-                    </p>
-                ) : null}
-            </div>
-            <div {...getCollapseProps()}>
-                <div className="myBookingsList">
-                    {upcomingBooking.length > 0 ? (
-                        <h2 className="myBookingsListTitle">
-                            Upcoming Bookings
-                        </h2>
+        <>
+            <div className="myBookingContainer">
+                <div
+                    className="myBookings"
+                    {...getToggleProps({ onClick: handleMyBookingsClick })}
+                >
+                    {" "}
+                    {isExpanded ? (
+                        <p className="myBookingsClose">Close</p>
                     ) : (
-                        <p className="myBookingsMsg">
-                            You don't have upcoming bookings.{" "}
-                        </p>
+                        <h3 className="myBookingsTitle">My Bookings</h3>
                     )}
-                    {upcomingBooking
-                        ? upcomingBooking.map((item) => {
-                              return (
-                                  <>
-                                      <div className="eachBooking">
-                                          <p>{item.name}</p>
-                                          <p>{item.service_name}</p>
-                                          <p>€ {item.price}</p>
-                                          <p>{item.slot_time.slice(0, 5)}</p>
-                                          <p>
-                                              {convertingDate(item.slot_date)}
-                                          </p>
-                                          <button
-                                              className="myBookingsBtn"
-                                              onClick={() =>
-                                                  handleCancelClick(item.slotid)
-                                              }
-                                          >
-                                              Cancel
-                                          </button>
-                                      </div>
-                                  </>
-                              );
-
-                              // eslint-disable-next-line react/no-unescaped-entities
-                          })
-                        : null}
-                    {pastBookings ? (
-                        <h2 className="myBookingsListTitle">Past Bookings</h2>
+                    {!isExpanded && upcomingBooking.length > 0 ? (
+                        <p className="myBookingsMsg">
+                            You have {upcomingBooking.length} upcoming bookings.
+                        </p>
                     ) : null}
-                    {pastBookings &&
-                        pastBookings.map((item) => {
-                            return (
-                                <>
-                                    <div className="eachBooking">
-                                        <p>{item.name}</p>
-                                        <p>{item.service_name}</p>
-                                        <p>€ {item.price}</p>
-                                        <p>{item.slot_time.slice(0, 5)}</p>
-                                        <p>{convertingDate(item.slot_date)}</p>
-                                    </div>
-                                </>
-                            );
-                        })}
+                    {!isExpanded && upcomingBooking.length === 0 ? (
+                        // eslint-disable-next-line react/no-unescaped-entities
+                        <p className="myBookingsMsg">
+                            {" "}
+                            You don't have upcoming bookings.
+                        </p>
+                    ) : null}
                 </div>
-            </div>{" "}
-        </div>
+                <div {...getCollapseProps()}>
+                    <div className="myBookingsList">
+                        {upcomingBooking.length > 0 ? (
+                            <h2 className="myBookingsListTitle">
+                                Upcoming Bookings
+                            </h2>
+                        ) : (
+                            <p className="myBookingsMsg">
+                                You don't have upcoming bookings.{" "}
+                            </p>
+                        )}
+                        {upcomingBooking
+                            ? upcomingBooking.map((item) => {
+                                  return (
+                                      <>
+                                          <div className="eachBooking">
+                                              <p>{item.name}</p>
+                                              <p>{item.service_name}</p>
+                                              <p>€ {item.price}</p>
+                                              <p>
+                                                  {item.slot_time.slice(0, 5)}
+                                              </p>
+                                              <p>
+                                                  {convertingDate(
+                                                      item.slot_date
+                                                  )}
+                                              </p>
+                                              <button
+                                                  className="myBookingsBtn"
+                                                  onClick={() =>
+                                                      handleCancelClick(
+                                                          item.slotid
+                                                      )
+                                                  }
+                                              >
+                                                  Cancel
+                                              </button>
+                                          </div>
+                                      </>
+                                  );
+
+                                  // eslint-disable-next-line react/no-unescaped-entities
+                              })
+                            : null}
+                        {pastBookings ? (
+                            <h2 className="myBookingsListTitle">
+                                Past Bookings
+                            </h2>
+                        ) : null}
+                        {pastBookings &&
+                            pastBookings.map((item) => {
+                                return (
+                                    <>
+                                        <div className="eachBooking">
+                                            <p>{item.name}</p>
+                                            <p>{item.service_name}</p>
+                                            <p>€ {item.price}</p>
+                                            <p>{item.slot_time.slice(0, 5)}</p>
+                                            <p>
+                                                {convertingDate(item.slot_date)}
+                                            </p>
+                                        </div>
+                                    </>
+                                );
+                            })}
+                    </div>
+                </div>{" "}
+            </div>
+            {/* {showReviewWrite ? <ReviewWrite></ReviewWrite> : null} */}
+        </>
     );
 }

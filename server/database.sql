@@ -25,13 +25,13 @@
 -- --   created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 -- -- )
 
--- CREATE TABLE password_reset_codes (
---     id              SERIAL PRIMARY KEY,
---     user_id         INT REFERENCES accounts (id) NOT NULL,
---     code            VARCHAR(6) NOT NULL,
---     email           VARCHAR(50) NOT NULL,
---     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
--- );
+CREATE TABLE password_reset_codes (
+    id              SERIAL PRIMARY KEY,
+    user_id         INT REFERENCES clientAccounts (id) NOT NULL,
+    code            VARCHAR(6) NOT NULL,
+    email           VARCHAR(50) NOT NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE professional_profile (
   id                SERIAL PRIMARY KEY,

@@ -65,6 +65,27 @@ export default function SearchAndResults() {
     });
 
     const slots = useSelector((state) => {
+        const date = new Date();
+        const year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let hour = date.getHours() + 1;
+
+        if (month < 10) {
+            month = "0" + month;
+        }
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (hour < 10) {
+            hour = "0" + hour;
+        }
+        if (hour === 24) {
+            hour = hour - 1;
+        }
+        const today = `${year}-${month}-${day}`;
+        const time = `${hour}:00:00`;
+
         if (state.searchAndResultsReducer) {
             let newArray = [];
             const isDuplicate = (obj, arr) => {
@@ -74,10 +95,21 @@ export default function SearchAndResults() {
             };
 
             for (const obj of state.searchAndResultsReducer) {
-                if (!isDuplicate(obj, newArray)) {
-                    newArray.push(obj);
+                const slotDate = obj.slot_date.slice(0, 10);
+
+                if (slotDate === today) {
+                    if (obj.slot_time > time) {
+                        if (!isDuplicate(obj, newArray)) {
+                            newArray.push(obj);
+                        }
+                    }
+                } else {
+                    if (!isDuplicate(obj, newArray)) {
+                        newArray.push(obj);
+                    }
                 }
             }
+
             return newArray;
         }
     });

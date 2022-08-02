@@ -80,7 +80,7 @@ function changePassword(newpassword, id) {
     return hashPassword(newpassword)
         .then((hashPass) => {
             return db.query(
-                `UPDATE users SET hash_password = $1 WHERE id = $2
+                `UPDATE clientAccounts SET hash_password = $1 WHERE id = $2
             RETURNING * `,
                 [hashPass, id]
             );
@@ -216,6 +216,44 @@ function cancelBooking({ slotid }) {
         });
 }
 
+function resetCode(email) {
+    return getUserByemail(email).then((result) => {
+        if (!result) {
+            return "user not found";
+        } else {
+            const secretCode = cryptoRandomString({
+                length: 6,
+            });
+            return db.query(
+                `INSERT INTO password_reset_codes (user_id, code, email)
+        VALUES ($1,$2,$3)
+        RETURNING * `,
+                [result.id, secretCode, email]
+            );
+        }
+    });
+}
+
+function checkResetCode(email, code) {
+    return db
+        .query(
+            `SELECT * FROM password_reset_codes 
+    WHERE email = $1 AND  code = $2 AND CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'`,
+            [email, code]
+        )
+        .then((result) => {
+            return result.rows[0];
+        })
+        .catch((error) => console.log("checkResetCode ERROR", error));
+}
+
+// FUNCTION CALLED BY resetCode()
+function getUserByemail(email) {
+    return db
+        .query(`SELECT * FROM clientAccounts WHERE email = $1`, [email])
+        .then((result) => result.rows[0]);
+}
+
 module.exports = {
     createClientAccount,
     clientAuthLogin,
@@ -224,4 +262,7 @@ module.exports = {
     insertBooking,
     getAppointments,
     cancelBooking,
+    checkResetCode,
+    resetCode,
+    changePassword,
 };

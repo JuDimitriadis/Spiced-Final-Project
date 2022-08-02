@@ -133,7 +133,7 @@ export default function FilterBar({
             latitude: 52.536594783793284,
             zoom: 10,
         });
-        setSearchCategoryValue();
+        setSearchCategoryValue("");
         setSearchDateValue(new Date().toLocaleDateString("en-CA"));
 
         // dispatch(
@@ -175,7 +175,8 @@ export default function FilterBar({
                 <input
                     type="date"
                     name="date"
-                    defaultValue={new Date().toLocaleDateString("en-CA")}
+                    // defaultValue={new Date().toLocaleDateString("en-CA")}
+                    value={searchDateValue}
                     min={disablePastDates()}
                     onChange={(evt) => setSearchDateValue(evt.target.value)}
                     required
@@ -185,6 +186,7 @@ export default function FilterBar({
                 <select
                     name="categories"
                     onChange={(evt) => handleCategoryChange(evt.target.value)}
+                    value={searchCategoryValue}
                 >
                     <option value="categories">Categories</option>
                     <option value="barber">Barber</option>
