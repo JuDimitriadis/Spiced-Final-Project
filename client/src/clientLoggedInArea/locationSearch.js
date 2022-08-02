@@ -1,4 +1,10 @@
-const { mapbox_token } = require("../secret.json");
+let mapbox_token;
+if (process.env.NODE_ENV == "production") {
+    mapbox_token = process.env;
+} else {
+    mapbox_token = require("../secret.json");
+}
+
 import { useEffect, useState } from "react";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
@@ -7,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { receivedsearchData } from "../redux/searchAndResults/slicer";
 import { receviedViewState } from "../redux/locationSearch/slicer";
 
-mapboxgl.accessToken = mapbox_token;
+mapboxgl.accessToken = mapbox_token.mapbox_token;
 
 export default function LocationSearch({
     searchNameValue,
