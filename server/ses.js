@@ -8,9 +8,9 @@ if (process.env.NODE_ENV == "production") {
 }
 
 AWS.config.update({
-    accessKeyId: secrets.aws.key,
-    secretAccessKey: secrets.aws.secret,
-    region: secrets.aws.ses.region,
+    accessKeyId: secrets.key,
+    secretAccessKey: secrets.secret,
+    region: secrets.region,
 });
 
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
