@@ -44,4 +44,20 @@ Redux &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mapbox &nbsp;
 
 **Login**
 
-<img alt='login preview' src='/client/public/TEM-login.gif'>
+<img alt='login preview' src='/client/public/TBB-login.gif'>
+
+**Search**
+
+<img alt='search preview' src='/client/public/TBB-search.gif'>
+
+**Map Search**
+
+<img alt='Map Search preview' src='/client/public/TBB-map-search.gif'>
+
+**Booking**
+
+<img alt='Booking preview' src='/client/public/TBB-booking.gif'>
+
+**Booking Cancelation**
+
+<img alt='login preview' src='/client/public/TBB-booking-cancelation.gif'>
