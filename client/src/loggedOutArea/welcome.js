@@ -3,15 +3,15 @@ import { useState, useEffect } from "react";
 import ClientLoginRegistration from "./clientLoginRegistration";
 
 export default function Welcome() {
-    const [picUrl, setPicUrl] = useState();
+    // const [picUrl, setPicUrl] = useState();
 
     // const [accountType, setAccountType] = useState();
 
-    useEffect(() => {
-        const random = Math.floor(Math.random() * 6) + 1;
-        const picUrl = `${random}.jpg`;
-        setPicUrl(picUrl);
-    }, []);
+    // useEffect(() => {
+    // const random = Math.floor(Math.random() * 6) + 1;
+    // const picUrl = `${random}.jpg`;
+    // setPicUrl(picUrl);
+    // }, []);
 
     // function handleRadioBtnSelection({ target }) {
     //     setAccountType(target.defaultValue);
@@ -20,7 +20,7 @@ export default function Welcome() {
     return (
         <>
             {" "}
-            <img className="welcomeBackground" src={picUrl} />
+            {/* <img className="welcomeBackground" src={picUrl} /> */}
             <div className="shadowWelcome">
                 <h1 className="welcomeLogo"> The Beauty Booking</h1>
                 <ClientLoginRegistration></ClientLoginRegistration>
