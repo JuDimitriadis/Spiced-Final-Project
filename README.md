@@ -5,7 +5,6 @@ It was my final project at the Spiced Academy Bootcamp. My inspiration for this 
 The page allows users to search for beauty services by location, category, dates, name, and price range. Users can also make or cancel appointments online.
 It was my second project using React and the first using Mapbox.
 
-Click *[here](https://thebeautybooking.herokuapp.com/)* to check the live page.
 
 ## Functionalities
 
@@ -35,6 +34,7 @@ Redux &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mapbox &nbsp;
 
 ## To do
 
+- Deploy it on Heroku
 - Add 'change password' functionality
 - Add beauty professional logged area
 - Refactor using Material UI for styling
