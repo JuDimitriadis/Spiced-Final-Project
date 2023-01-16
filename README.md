@@ -17,20 +17,29 @@ It was my second project using React and the first using Mapbox.
 - Cancel bookings
 
 
-## Tecnology
+## Technology
 
-<img alt="JavaScript" src="https://simpleicons.org/icons/javascript.svg" width=80 heigth=80> &nbsp;&nbsp;&nbsp;&nbsp; 
-<img alt="Node.js" src="https://simpleicons.org/icons/nodedotjs.svg" width=80 heigth=80> &nbsp;&nbsp;&nbsp;&nbsp; 
-<img alt="Express.js" src="https://simpleicons.org/icons/express.svg" width=80 heigth=80> &nbsp;&nbsp;&nbsp;&nbsp; 
-<img alt="React" src="https://simpleicons.org/icons/react.svg" width=80 heigth=80> &nbsp;&nbsp;&nbsp;&nbsp; 
-<img alt="Redux" src="https://simpleicons.org/icons/redux.svg" width=80 heigth=80> &nbsp;&nbsp;&nbsp;&nbsp; 
-<img alt="Mapbox" src="https://simpleicons.org/icons/mapbox.svg" width=80 heigth=80> &nbsp;&nbsp;&nbsp;&nbsp; 
-<img alt="PostgreSQL" src="https://simpleicons.org/icons/postgresql.svg" width=80 heigth=80>
-
-<div heigth=40>Java Script &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Node.JS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-Express &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; React &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Redux &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mapbox &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- PostgreSQL</div>
+<a title="JavaScript" target=”_blank” href="https://g.co/kgs/w74UK9">
+    <img alt="JavaScript" src="https://simpleicons.org/icons/javascript.svg" width=80 height=80/>
+</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a title="Node.js" target=”_blank” href="https://nodejs.org/en/">
+    <img alt="Node.js" src="https://simpleicons.org/icons/nodedotjs.svg" width=80 height=80> 
+</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a title="Express.js" target=”_blank” href="https://expressjs.com/">
+    <img alt="Express.js" src="https://simpleicons.org/icons/express.svg" width=80 height=80>
+</a>  &nbsp;&nbsp;&nbsp;&nbsp;
+<a title="React" target=”_blank” href="https://reactjs.org/">
+    <img alt="React" src="https://simpleicons.org/icons/react.svg" width=80 height=80> 
+</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a title="Redux" target=”_blank” href="https://redux.js.org/">
+    <img alt="Redux" src="https://simpleicons.org/icons/redux.svg" width=80 height=80> 
+</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a title="Mapbox" target=”_blank” href="https://www.mapbox.com/">
+    <img alt="Mapbox" src="https://simpleicons.org/icons/mapbox.svg" width=80 heigth=80>  
+</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a title="PostgreSQL" target=”_blank” href="https://www.postgresql.org/">
+    <img alt="PostgreSQL" src="https://simpleicons.org/icons/postgresql.svg" width=80 height=80> 
+</a>
 
 ## To do
 
